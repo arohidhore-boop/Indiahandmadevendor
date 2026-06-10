@@ -31,7 +31,7 @@ function Gst() {
   return (
     <AuthShell step={5} totalSteps={5}>
       <div className="surface-card p-8">
-        <h1 className="font-serif text-3xl">Do you have a GST number?</h1>
+        <h1 className="font-serif text-[28px] leading-[32px] font-medium">Do you have a GST number?</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-1 whitespace-pre-line">
           To sell across India, you’ll need a GST number. {"\n\n"}Don’t have one?{"\n"}No worries—Get an EID number in 5 minutes. Sell within your state.
         </p>
@@ -43,7 +43,7 @@ function Gst() {
 
         {hasGst === "yes" && (
           <label className="block mt-5 animate-fade-up">
-            <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">GST Number</span>
+            <span className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">GST Number</span>
             <input
               value={gst}
               onChange={(e) => setGst(e.target.value.toUpperCase())}
@@ -55,7 +55,7 @@ function Gst() {
 
         {hasGst === "no" && (
           <label className="block mt-5 animate-fade-up">
-            <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">EID Number (optional)</span>
+            <span className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">EID Number (optional)</span>
             <input
               value={eid}
               onChange={(e) => setEid(e.target.value.toUpperCase())}

@@ -128,15 +128,12 @@ function Onboarding() {
 function Header({ step }: { step: number }) {
   return (
     <div>
-      <Link to="/post" className="text-xs text-[var(--muted-foreground)] hover:text-[var(--primary)] inline-flex items-center gap-1">
+      <Link to="/post" className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] hover:text-[var(--primary)] inline-flex items-center gap-1">
         <ArrowLeft className="h-3.5 w-3.5" /> Back to dashboard
       </Link>
-      <h1 className="font-serif text-[26px] sm:text-3xl mt-2 leading-tight">
+      <h1 className="font-serif text-[28px] leading-[32px] font-medium mt-2">
         {STEP_LABELS[step - 1]}
       </h1>
-      <p className="text-sm text-[var(--muted-foreground)] mt-1">
-        Step {step} of 5
-      </p>
     </div>
   );
 }
@@ -156,14 +153,14 @@ function Stepper({
   const pct = Math.round((completedCount / STEP_LABELS.length) * 100);
   return (
     <div className="surface-card p-5">
-      <div className="flex items-center justify-between text-xs text-[var(--muted-foreground)] mb-2">
+      <div className="flex items-center justify-between text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] mb-2">
         <span>{completedCount} of {STEP_LABELS.length} steps complete</span>
         <span className="font-medium text-[var(--foreground)]">{pct}%</span>
       </div>
       <div className="h-2 rounded-full bg-[var(--cream)] overflow-hidden">
         <div className="h-full bg-[var(--primary)] transition-all" style={{ width: `${pct}%` }} />
       </div>
-      <ol className="mt-5 grid grid-cols-2 sm:grid-cols-5 gap-2">
+      <ol className="mt-5 grid grid-cols-5 gap-2">
         {STEP_LABELS.map((label, i) => {
           const n = i + 1;
           const status = statuses[n];
@@ -174,7 +171,7 @@ function Stepper({
             <li key={label}>
               <button
                 onClick={() => onJump(n)}
-                className={`w-full text-left rounded-xl p-3 border transition ${
+                className={`w-full h-[64px] text-left rounded-xl px-3 border transition ${
                   active
                     ? "border-[var(--primary)] bg-[var(--primary)]/5"
                     : done
@@ -186,7 +183,7 @@ function Stepper({
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className={`h-6 w-6 rounded-full grid place-items-center text-[11px] font-semibold ${
+                    className={`h-6 w-6 shrink-0 rounded-full grid place-items-center text-[11px] font-semibold ${
                       done
                         ? "bg-[var(--success)] text-white"
                         : attn
@@ -198,11 +195,8 @@ function Stepper({
                   >
                     {done ? <Check className="h-3.5 w-3.5" /> : n}
                   </span>
-                  <span className="text-[11px] uppercase tracking-wide text-[var(--muted-foreground)]">
-                    Step {n}
-                  </span>
+                  <span className="text-[14px] leading-[20px] font-medium line-clamp-2">{label}</span>
                 </div>
-                <div className="mt-1.5 text-xs font-medium leading-snug">{label}</div>
               </button>
             </li>
           );
@@ -229,14 +223,14 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)] flex items-center gap-1">
+      <span className="text-[14px] leading-[20px] tracking-[0.1px] font-medium text-[var(--foreground)] flex items-center gap-1">
         {label}
         {required && <span className="text-[var(--accent)]">*</span>}
       </span>
       <div className="mt-1.5">{children}</div>
-      {hint && !error && <p className="text-xs text-[var(--muted-foreground)] mt-1.5">{hint}</p>}
+      {hint && !error && <p className="text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)] mt-1.5">{hint}</p>}
       {error && (
-        <p className="text-xs text-[var(--destructive)] mt-1.5 flex items-center gap-1">
+        <p className="text-[14px] leading-[20px] text-[var(--destructive)] mt-1.5 flex items-center gap-1">
           <AlertCircle className="h-3.5 w-3.5" /> {error}
         </p>
       )}
@@ -245,7 +239,7 @@ function Field({
 }
 
 const inputCls =
-  "w-full px-4 py-3 rounded-[10px] border border-[var(--border)] bg-white text-sm outline-none focus:border-[var(--primary)] transition disabled:bg-[var(--cream)]/40 disabled:text-[var(--muted-foreground)]";
+  "w-full px-4 py-3 rounded-[10px] border border-[var(--border)] bg-white text-[14px] leading-[20px] outline-none focus:border-[var(--primary)] transition disabled:bg-[var(--cream)]/40 disabled:text-[var(--muted-foreground)]";
 
 function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${inputCls} ${props.className ?? ""}`} />;
@@ -286,7 +280,7 @@ function FileDrop({
       {value ? (
         <div className="mt-2">
           <div className="font-medium text-[var(--foreground)]">{value}</div>
-          <button type="button" className="text-xs text-[var(--primary)] underline mt-1" onClick={() => onChange("")}>
+          <button type="button" className="text-[14px] leading-[20px] text-[var(--primary)] underline mt-1" onClick={() => onChange("")}>
             Remove
           </button>
         </div>
@@ -323,7 +317,7 @@ function OptionRow({
     <button
       type="button"
       onClick={onClick}
-      className={`w-full text-left px-4 py-3 rounded-[10px] border-2 text-sm transition flex items-start gap-3 ${
+      className={`w-full text-left px-4 py-3 rounded-[10px] border-2 text-[14px] leading-[20px] transition flex items-start gap-3 ${
         active
           ? "border-[var(--primary)] bg-[var(--primary)]/5"
           : "border-[var(--border)] bg-white hover:border-[var(--primary)]/40"
@@ -338,7 +332,7 @@ function OptionRow({
       </span>
       <span className="flex-1">
         <span className="font-medium">{label}</span>
-        {desc && <span className="block text-xs text-[var(--muted-foreground)] mt-0.5">{desc}</span>}
+        {desc && <span className="block text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] mt-0.5">{desc}</span>}
       </span>
     </button>
   );
@@ -387,8 +381,8 @@ function Step1Gst({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-serif text-xl">Add GST or registration details</h2>
-        <p className="text-sm text-[var(--muted-foreground)] mt-1">
+        <h2 className="font-serif text-[20px] leading-[24px] font-medium">Add GST or registration details</h2>
+        <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-1">
           Do you have a GST number?
         </p>
       </div>
@@ -408,7 +402,7 @@ function Step1Gst({
         />
       </div>
       {errors.gstChoice && (
-        <p className="text-xs text-[var(--destructive)] flex items-center gap-1">
+        <p className="text-[14px] leading-[20px] text-[var(--destructive)] flex items-center gap-1">
           <AlertCircle className="h-3.5 w-3.5" /> {errors.gstChoice}
         </p>
       )}
@@ -480,15 +474,15 @@ function Step1Gst({
               </h3>
               <div className="border-l-2 border-[var(--success)] pl-4 space-y-4">
                 <div>
-                  <div className="text-xs text-[var(--muted-foreground)]">Name</div>
+                  <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">Name</div>
                   <div className="font-medium mt-0.5">{data.legalName ?? "—"}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-[var(--muted-foreground)]">PAN Number</div>
+                  <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">PAN Number</div>
                   <div className="font-medium mt-0.5">{data.pan ?? "—"}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-[var(--muted-foreground)]">Registered Business Address</div>
+                  <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">Registered Business Address</div>
                   <div className="font-medium mt-0.5">{data.registeredAddress ?? "—"}</div>
                 </div>
               </div>
@@ -512,12 +506,6 @@ function Step1Gst({
         <ConfirmCard data={data} />
       )}
 
-      <div className="rounded-xl bg-[var(--cream)]/60 border border-[var(--border)] p-3 flex gap-2">
-        <ShieldCheck className="h-4 w-4 text-[var(--success)] shrink-0 mt-0.5" />
-        <p className="text-xs text-[var(--muted-foreground)]">
-          Your tax details are encrypted and shared only with verified buyers and the Ministry of MSME.
-        </p>
-      </div>
     </div>
   );
 }
@@ -527,17 +515,14 @@ function ConfirmCard({ data }: { data: OnboardingData }) {
     <div className="rounded-2xl border border-[var(--border)] bg-white p-5 animate-fade-up">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="text-xs uppercase tracking-wider text-[var(--muted-foreground)] flex items-center gap-1.5">
+          <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] flex items-center gap-1.5">
             <Lock className="h-3 w-3" /> Official details fetched
           </div>
-          <h3 className="font-serif text-lg mt-1">Confirm your business details</h3>
+          <h3 className="font-serif text-[22px] leading-[28px] font-medium mt-1">Confirm your business details</h3>
         </div>
-        <span className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-[var(--success)]/15 text-[var(--success)]">
-          {data.registrationStatus ?? "Active"}
-        </span>
       </div>
 
-      <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+      <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-3">
         <ReadField label="Legal business name" value={data.legalName} />
         <div className="sm:col-span-2">
           <ReadField label="Registered address" value={data.registeredAddress} />
@@ -548,7 +533,7 @@ function ConfirmCard({ data }: { data: OnboardingData }) {
         <ReadField label="CIN (auto-fetched)" value={data.cin} />
       </dl>
 
-      <p className="text-xs text-[var(--muted-foreground)] mt-4">
+      <p className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] mt-4">
         Official GST data is read-only. You can edit your shop name, addresses and contact person in later steps.
       </p>
     </div>
@@ -570,7 +555,7 @@ function ReadField({
 }) {
   return (
     <div>
-      <dt className="text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">{label}</dt>
+      <dt className="text-[12px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)]">{label}</dt>
       {editable ? (
         <input
           value={editValue ?? ""}
@@ -578,7 +563,7 @@ function ReadField({
           className={inputCls + " mt-1"}
         />
       ) : (
-        <dd className="font-medium mt-0.5">{value ?? "—"}</dd>
+        <dd className="text-[14px] leading-[20px] font-medium mt-0.5">{value ?? "—"}</dd>
       )}
     </div>
   );
@@ -590,8 +575,8 @@ function Step2Shop({ data, set, errors }: StepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-serif text-xl">Tell us about your shop</h2>
-        <p className="text-sm text-[var(--muted-foreground)] mt-1">
+        <h2 className="font-serif text-[20px] leading-[24px] font-medium">Tell us about your shop</h2>
+        <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-1">
           These details appear on your India Handmade storefront.
         </p>
       </div>
@@ -631,15 +616,6 @@ function Step2Shop({ data, set, errors }: StepProps) {
           />
         </Field>
 
-        <Field label="Craft type" required error={errors.craftType}>
-          <Select value={data.craftType ?? ""} onChange={(e) => set("craftType", e.target.value)}>
-            <option value="">Select…</option>
-            {["Handicraft", "Handloom", "Both"].map((c) => (
-              <option key={c}>{c}</option>
-            ))}
-          </Select>
-        </Field>
-
       </div>
 
     </div>
@@ -660,23 +636,23 @@ function Step3Address({ data, set, errors }: StepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-serif text-xl">Confirm your address</h2>
-        <p className="text-sm text-[var(--muted-foreground)] mt-1">
+        <h2 className="font-serif text-[20px] leading-[24px] font-medium">Confirm your address</h2>
+        <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-1">
           We use these to send official communication and pick up your parcels.
         </p>
       </div>
 
       {hasGstAddress && (
-        <div className="rounded-2xl border border-[var(--border)] bg-white p-5">
-          <div className="text-xs uppercase tracking-wider text-[var(--muted-foreground)] flex items-center gap-1.5">
+        <div>
+          <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] flex items-center gap-1.5">
             <Lock className="h-3 w-3" /> Registered address from GST
           </div>
-          <p className="text-sm mt-2 font-medium">{data.registeredAddress}</p>
-          <p className="text-sm mt-1 font-medium">
+          <p className="text-[14px] leading-[20px] font-medium mt-2">{data.registeredAddress}</p>
+          <p className="text-[14px] leading-[20px] font-medium mt-1">
             {data.fetchedState} · {data.fetchedPincode}
           </p>
 
-          <div className="mt-4 text-sm font-medium">Can we use this as your communication address?</div>
+          <div className="mt-4 text-[14px] leading-[20px] font-medium">Can we use this as your communication address?</div>
           <div className="grid sm:grid-cols-2 gap-3 mt-2">
             <OptionRow
               active={data.useGstAddress === true}
@@ -708,7 +684,7 @@ function Step3Address({ data, set, errors }: StepProps) {
         />
       )}
 
-      <div className="rounded-2xl border border-[var(--border)] bg-white p-5 space-y-3">
+      <div className="pt-5 border-t border-[var(--border)] space-y-3">
         <div className="text-sm font-medium">Is your pickup address the same as your communication address?</div>
         <div className="grid sm:grid-cols-2 gap-3">
           <OptionRow
@@ -749,8 +725,7 @@ function AddressFields({
 }) {
   const k = (s: string) => (prefix + s.charAt(0).toUpperCase() + s.slice(1)) as keyof OnboardingData;
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-white p-5 space-y-4 animate-fade-up">
-      <h3 className="font-serif text-lg">{title}</h3>
+    <div className="space-y-4 animate-fade-up">
       <div className="grid sm:grid-cols-2 gap-5">
         <div className="sm:col-span-2">
           <Field label="Address line 1" required error={errors[k("line1") as string]}>
@@ -837,9 +812,9 @@ function Step4Bank({ data, set, errors }: StepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-serif text-xl">Add bank account for payouts</h2>
-        <p className="text-sm text-[var(--muted-foreground)] mt-1">
-          Payments from India Handmade will be sent to this account. If you change it later, the new account may need verification.
+        <h2 className="font-serif text-[20px] leading-[24px] font-medium">Add bank account for payouts</h2>
+        <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-1">
+          Payments from India Handmade will be sent to this account.
         </p>
       </div>
 
@@ -1032,7 +1007,7 @@ function ReviewSection({
           <span className="h-9 w-9 rounded-full bg-[var(--cream)] grid place-items-center">
             <Icon className="h-4 w-4 text-[var(--primary)]" />
           </span>
-          <h3 className="font-serif text-lg">{title}</h3>
+          <h3 className="font-serif text-[22px] leading-[28px] font-medium">{title}</h3>
         </div>
         <button onClick={onEdit} className="text-sm text-[var(--primary)] inline-flex items-center gap-1 hover:underline">
           <Pencil className="h-3.5 w-3.5" /> Edit
@@ -1041,8 +1016,8 @@ function ReviewSection({
       <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
         {rows.map(([k, v]) => (
           <div key={k}>
-            <dt className="text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">{k}</dt>
-            <dd className="font-medium mt-0.5 break-words">{v}</dd>
+            <dt className="text-[12px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)]">{k}</dt>
+            <dd className="text-[14px] leading-[20px] font-medium mt-0.5 break-words">{v}</dd>
           </div>
         ))}
       </dl>
@@ -1059,11 +1034,11 @@ function validateStep(step: number, d: OnboardingData): Record<string, string> {
     if (!d.gstChoice) e.gstChoice = "Please choose an option";
     if (d.gstChoice === "yes_gst" && (!d.gstNumber || d.gstNumber.length < 15)) e.gstNumber = "Enter a valid 15-character GSTIN";
     if (d.gstChoice === "eid" && !d.eidNumber) e.eidNumber = "Please enter your EID number";
+    // "no_gst" = skip for now — no further validation required
   } else if (step === 2) {
     if (!d.publicShopName) e.publicShopName = "Please enter your shop name";
     if (!d.contactName) e.contactName = "Please enter contact person name";
     if (!d.mobile || d.mobile.length !== 10) e.mobile = "Enter a valid 10-digit mobile";
-    if (!d.craftType) e.craftType = "Please choose your craft type";
   } else if (step === 3) {
     if (!d.useGstAddress) {
       if (!d.commLine1) e.commLine1 = "Required";

@@ -129,7 +129,7 @@ function HomeOnboarding({
             <div className="h-16 w-16 rounded-full bg-[var(--primary)]/10 grid place-items-center mx-auto">
               <PartyPopper className="h-8 w-8 text-[var(--primary)]" />
             </div>
-            <h2 className="font-serif text-2xl mt-5">Congratulations!</h2>
+            <h2 className="font-serif text-[24px] leading-[28px] font-medium mt-5">Congratulations!</h2>
             <p className="text-sm text-[var(--muted-foreground)] mt-2">
               You are now registered on India Handmade. Complete your profile to start selling.
             </p>
@@ -143,17 +143,17 @@ function HomeOnboarding({
 
       {/* Welcome */}
       <div>
-        <h1 className="font-serif text-[28px] sm:text-[32px] leading-tight">
+        <h1 className="font-serif text-[28px] leading-[32px] leading-tight">
           Welcome to India Handmade, {seller?.name ?? "seller"}
         </h1>
-        <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-2 max-w-2xl">
+        <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-2 max-w-lg">
           {profileCompleted
             ? "Your profile is ready. Add your first handmade product to start receiving orders."
-            : "Complete your profile so we can verify your details, help customers discover your shop, and set up payouts."}
+            : "Complete your profile to verify your shop, improve discoverability, and enable payouts."}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 -mt-3">
         {/* LEFT — Complete your profile card */}
         <div className="lg:col-span-2 flex flex-col gap-5">
           <div className="surface-card p-6 sm:p-7">
@@ -161,24 +161,21 @@ function HomeOnboarding({
               <div className="flex-1 min-w-[200px]">
                 {profileCompleted ? (
                   <>
-                    <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-medium text-[var(--success)] bg-[var(--success)]/10 px-2.5 py-1 rounded-full">
+                    <div className="inline-flex items-center gap-1.5 text-[11px] leading-[16px] tracking-[0.5px] font-medium text-[var(--success)] bg-[var(--success)]/10 px-2.5 py-1 rounded-full">
                       <Check className="h-3 w-3" /> Profile complete
                     </div>
-                    <h2 className="font-serif text-xl mt-2">Your seller profile is ready</h2>
+                    <h2 className="font-serif text-[20px] leading-[24px] font-medium mt-2">Your seller profile is ready</h2>
                   </>
                 ) : (
                   <>
-                    <h2 className="font-serif text-xl">Complete your profile</h2>
-                    <p className="text-sm text-[var(--muted-foreground)] mt-1 max-w-md">
-                      Add your GST or registration details, confirm your shop information, add your address, and set up your bank account for payouts.
-                    </p>
+                    <h2 className="font-serif text-[20px] leading-[24px] font-medium">Complete your profile</h2>
                   </>
                 )}
                 <p className="text-sm font-medium mt-3">
                   {totalCompleted} of {totalSteps} steps complete
                 </p>
               </div>
-              <div className="font-serif text-3xl text-[var(--primary)]">{pct}%</div>
+              <div className="font-serif text-[28px] leading-[32px] font-medium text-[var(--primary)]">{pct}%</div>
             </div>
 
             <div className="mt-3 h-2.5 rounded-full bg-[var(--cream)] overflow-hidden">

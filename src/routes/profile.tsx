@@ -13,16 +13,16 @@ function Profile() {
   return (
     <AppShell>
       <div>
-        <h1 className="font-serif text-[26px]">Your profile</h1>
+        <h1 className="font-serif text-[28px] leading-[32px]">Your profile</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-1">Information shown to buyers.</p>
       </div>
 
       <div className="surface-card p-6 flex items-center gap-5">
-        <div className="h-20 w-20 rounded-full bg-[var(--primary)] text-white grid place-items-center font-serif text-3xl">
+        <div className="h-20 w-20 rounded-full bg-[var(--primary)] text-white grid place-items-center font-serif text-[28px] leading-[32px] font-medium">
           {seller?.initials ?? "SM"}
         </div>
         <div className="flex-1">
-          <div className="font-serif text-2xl">{seller?.name ?? "Samba Sakhi"}</div>
+          <div className="font-serif text-[24px] leading-[28px] font-medium">{seller?.name ?? "Samba Sakhi"}</div>
           <div className="text-sm text-[var(--muted-foreground)]">{seller?.sellerType}</div>
         </div>
         <button className="ih-btn ih-btn-outline">
@@ -32,7 +32,7 @@ function Profile() {
 
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="surface-card p-6 space-y-4">
-          <h3 className="font-serif text-xl">Business details</h3>
+          <h3 className="font-serif text-[20px] leading-[24px] font-medium">Business details</h3>
           <Row label="Shop name" v={seller?.shopName} />
           <Row label="City" v={seller?.city} />
           <Row label="State" v={seller?.state} />
@@ -42,7 +42,7 @@ function Profile() {
         </div>
 
         <div className="surface-card p-6">
-          <h3 className="font-serif text-xl">Your story</h3>
+          <h3 className="font-serif text-[20px] leading-[24px] font-medium">Your story</h3>
           <p className="text-sm text-[var(--muted-foreground)] mt-1">Tell buyers about your craft and journey.</p>
           <textarea
             rows={8}
@@ -57,7 +57,7 @@ function Profile() {
 
       <div className="surface-card p-6">
         <div className="flex items-center justify-between">
-          <h3 className="font-serif text-xl">Recognitions</h3>
+          <h3 className="font-serif text-[20px] leading-[24px] font-medium">Recognitions</h3>
           <button className="ih-btn ih-btn-outline">
             <Plus className="h-4 w-4" /> Add recognition
           </button>

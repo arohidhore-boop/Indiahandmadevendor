@@ -14,7 +14,7 @@ function Signup() {
   return (
     <AuthShell step={1} totalSteps={5}>
       <div className="surface-card p-8">
-        <h1 className="font-serif text-3xl">Create your account</h1>
+        <h1 className="font-serif text-[28px] leading-[32px] font-medium">Create your account</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-1">
           A few quick steps to start selling your craft.
         </p>
@@ -54,7 +54,7 @@ function Signup() {
 
         <div className="flex items-center gap-3 my-6">
           <span className="flex-1 h-px bg-[var(--border)]" />
-          <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">or</span>
+          <span className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">or</span>
           <span className="flex-1 h-px bg-[var(--border)]" />
         </div>
 
@@ -66,18 +66,18 @@ function Signup() {
           className="space-y-4"
         >
           <Field label="Email">
-            <input type="email" className="ih-input" placeholder="you@example.in" />
+            <input type="email" className="ih-input" placeholder="you@example.in" defaultValue="demo@indiahandmade.in" />
           </Field>
           <Field label="Password">
             <div className="relative">
-              <input type={show ? "text" : "password"} minLength={6} className="ih-input pr-10" />
+              <input type={show ? "text" : "password"} minLength={6} className="ih-input pr-10" defaultValue="demo1234" />
               <button type="button" onClick={() => setShow((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" aria-label="Toggle password">
                 {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
           </Field>
           <Field label="Confirm password">
-            <input type={show ? "text" : "password"} minLength={6} className="ih-input" />
+            <input type={show ? "text" : "password"} minLength={6} className="ih-input" defaultValue="demo1234" />
           </Field>
           <button className="ih-btn ih-btn-primary ih-btn-full">
             Continue
@@ -109,7 +109,7 @@ function SocialButton({ icon, label, onClick }: { icon: React.ReactNode; label: 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">{label}</span>
+      <span className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">{label}</span>
       <div className="mt-1.5">{children}</div>
     </label>
   );

@@ -17,7 +17,8 @@ export function GovBar() {
   }, [hc]);
 
   return (
-    <div className="h-10 w-full bg-[var(--gov)] text-white text-[12px] flex items-center px-4 lg:px-8 gap-4">
+    <div className="h-10 w-full bg-[var(--gov)] text-white text-[12px]">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10 h-full flex items-center gap-4">
       <div className="flex items-center gap-2">
         <img src={flagImg} alt="Flag of India" className="h-4 w-6 object-contain" />
         <span className="font-medium tracking-wide">Government of India</span>
@@ -43,6 +44,7 @@ export function GovBar() {
         <button className="hidden md:inline-flex items-center gap-1.5 hover:underline pl-4">
           <Accessibility className="h-3.5 w-3.5" /> More
         </button>
+      </div>
       </div>
     </div>
   );

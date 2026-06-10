@@ -14,7 +14,7 @@ function Login() {
   return (
     <AuthShell>
       <div className="surface-card p-8">
-        <h1 className="font-serif text-3xl">Welcome back</h1>
+        <h1 className="font-serif text-[28px] leading-[32px] font-medium">Welcome back</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-1">
           Sign in to continue selling on India Handmade.
         </p>
@@ -26,11 +26,11 @@ function Login() {
           className="mt-6 space-y-4"
         >
           <Field label="Email">
-            <input type="email" placeholder="you@example.in" className="ih-input" />
+            <input type="email" placeholder="you@example.in" className="ih-input" defaultValue="demo@indiahandmade.in" />
           </Field>
           <Field label="Password">
             <div className="relative">
-              <input type={show ? "text" : "password"} className="ih-input pr-10" />
+              <input type={show ? "text" : "password"} className="ih-input pr-10" defaultValue="demo1234" />
               <button
                 type="button"
                 onClick={() => setShow((s) => !s)}
@@ -63,7 +63,7 @@ function Login() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">{label}</span>
+      <span className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">{label}</span>
       <div className="mt-1.5">{children}</div>
     </label>
   );

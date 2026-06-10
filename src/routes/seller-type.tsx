@@ -24,7 +24,7 @@ function SellerType() {
   return (
     <AuthShell step={3} totalSteps={5}>
       <div className="surface-card p-8">
-        <h1 className="font-serif text-3xl">What kind of seller are you?</h1>
+        <h1 className="font-serif text-[28px] leading-[32px] font-medium">What kind of seller are you?</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-1">
           This helps us tailor your shop and recognitions.
         </p>

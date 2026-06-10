@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowRight,
+  Camera,
   Check,
   Copy,
   Download,
@@ -76,19 +77,18 @@ export function SellerDashboard() {
       <section className="surface-card p-6 sm:p-8">
         {isLive ? (
             <>
-              <h1 className="font-serif text-[28px] sm:text-[34px] leading-tight mt-3">
-              Your store is ready <span aria-hidden>🎉</span>
+              <h1 className="font-serif text-[28px] leading-[32px] font-medium mt-3">
+              Your store is ready
             </h1>
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-2 max-w-2xl">
-              Your profile is complete and your first product has been added. Share your store
-              with customers and start receiving orders.
+              Your profile is complete. Share your store and start receiving orders.
             </p>
 
             <div className="mt-6 flex items-stretch gap-2 rounded-[10px] border border-[var(--border)] bg-white p-1.5 max-w-2xl">
               <div className="flex-1 px-3 py-2 text-sm font-mono text-[var(--foreground)] truncate">
                 {storeUrl}
               </div>
-              <button onClick={copyLink} className="ih-btn ih-btn-outline shrink-0">
+              <button onClick={copyLink} className="ih-btn ih-btn-primary shrink-0">
                 <Copy className="h-4 w-4" /> {copied ? "Copied" : "Copy"}
               </button>
             </div>
@@ -113,32 +113,15 @@ export function SellerDashboard() {
               <button onClick={() => setShareOpen(true)} className="ih-btn ih-btn-outline">
                 <Download className="h-4 w-4" /> QR code
               </button>
-              <button onClick={() => setShareOpen(true)} className="ih-btn ih-btn-primary">
-                <Share2 className="h-4 w-4" /> More options
-              </button>
-              <a
-                href={fullUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="ih-btn ih-btn-ghost text-[var(--muted-foreground)] ml-auto"
-              >
-                <Eye className="h-4 w-4" /> View your store
-              </a>
             </div>
 
-            <div className="mt-4 p-3 rounded-[10px] bg-[var(--cream)]/60 border border-[var(--border)] text-sm text-[var(--foreground)] max-w-2xl">
-              <div className="text-[11px] uppercase tracking-wider text-[var(--muted-foreground)] mb-1">
-                Message preview
-              </div>
-              "{message}"
-            </div>
           </>
         ) : (
           <>
-            <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-medium text-[var(--info)] bg-[var(--info)]/10 px-2.5 py-1 rounded-full">
+            <div className="inline-flex items-center gap-1.5 text-[11px] leading-[16px] tracking-[0.5px] font-medium text-[var(--info)] bg-[var(--info)]/10 px-2.5 py-1 rounded-full">
               <Clock className="h-3 w-3" /> Under review
             </div>
-            <h1 className="font-serif text-[28px] sm:text-[34px] leading-tight mt-3">
+            <h1 className="font-serif text-[28px] leading-[32px] font-medium mt-3">
               Your store is almost ready
             </h1>
             <p className="text-sm sm:text-base text-[var(--muted-foreground)] mt-2 max-w-2xl">
@@ -170,9 +153,9 @@ export function SellerDashboard() {
             <div className="h-11 w-11 rounded-full bg-[var(--cream)] grid place-items-center shrink-0">
               <Store className="h-5 w-5 text-[var(--primary)]" />
             </div>
-            <h2 className="font-serif text-xl">Store status</h2>
+            <h2 className="font-serif text-[20px] leading-[24px] font-medium">Store status</h2>
           </div>
-          <ul className="mt-4 space-y-3 text-sm flex-1">
+          <ul className="mt-4 space-y-3 text-[14px] leading-[20px] flex-1">
             <li className="flex items-center justify-between">
               <span className="text-[var(--muted-foreground)]">Store</span>
               {isLive
@@ -202,52 +185,37 @@ export function SellerDashboard() {
         </div>
 
         {/* First product */}
-        <div className="surface-card p-6">
-          <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-full bg-[var(--cream)] grid place-items-center shrink-0">
-              <Package className="h-5 w-5 text-[var(--primary)]" />
-            </div>
-            <h2 className="font-serif text-xl">Your first product</h2>
+        <div className="surface-card overflow-hidden">
+          <div className="w-full h-48 bg-[var(--cream)] grid place-items-center">
+            <Camera className="h-12 w-12 text-[var(--muted-foreground)]" />
           </div>
+          <div className="p-5">
           {firstProduct ? (
-            <div className="mt-4 flex gap-4">
-              <div className="h-20 w-20 rounded-[10px] bg-[var(--cream)] grid place-items-center text-3xl shrink-0">
-                {firstProduct.emoji ?? "🧺"}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="font-medium truncate">{firstProduct.name}</div>
-                <div className="text-sm text-[var(--muted-foreground)] mt-0.5">
-                  ₹{firstProduct.price.toLocaleString("en-IN")}
-                </div>
-                <div className="mt-2">
-                  {firstProduct.status === "active"
-                    ? statusBadge("Live", "ok")
-                    : firstProduct.status === "review"
-                    ? statusBadge("In review", "info")
-                    : firstProduct.status === "draft"
-                    ? statusBadge("Draft", "muted")
-                    : statusBadge("Needs changes", "warn")}
-                </div>
+            <div className="mb-4">
+              <div className="font-medium truncate">{firstProduct.name}</div>
+              <div className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-0.5">
+                ₹{firstProduct.price.toLocaleString("en-IN")}
               </div>
             </div>
           ) : (
-            <p className="mt-4 text-sm text-[var(--muted-foreground)]">No product yet.</p>
+            <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mb-4">No product yet.</p>
           )}
-          <div className="mt-4 grid grid-cols-2 gap-3 text-center">
+          <div className="grid grid-cols-2 gap-3 text-center">
             <div className="rounded-[10px] bg-[var(--cream)]/60 border border-[var(--border)] p-3">
-              <div className="font-serif text-2xl">0</div>
-              <div className="text-xs text-[var(--muted-foreground)]">Views</div>
+              <div className="font-serif text-[24px] leading-[28px] font-medium">0</div>
+              <div className="text-[14px] leading-[20px] text-[var(--muted-foreground)]">Views</div>
             </div>
             <div className="rounded-[10px] bg-[var(--cream)]/60 border border-[var(--border)] p-3">
-              <div className="font-serif text-2xl">0</div>
-              <div className="text-xs text-[var(--muted-foreground)]">Orders</div>
+              <div className="font-serif text-[24px] leading-[28px] font-medium">0</div>
+              <div className="text-[14px] leading-[20px] text-[var(--muted-foreground)]">Orders</div>
             </div>
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Link to="/products" className="ih-btn ih-btn-outline">Manage product</Link>
-            <Link to="/add-product" className="ih-btn ih-btn-primary">
+          <div className="mt-4 flex flex-col gap-2">
+            <Link to="/products" className="ih-btn ih-btn-outline w-full justify-center">Manage product</Link>
+            <Link to="/add-product" className="ih-btn ih-btn-primary w-full justify-center">
               <PackagePlus className="h-4 w-4" /> Add another
             </Link>
+          </div>
           </div>
         </div>
 
@@ -257,7 +225,7 @@ export function SellerDashboard() {
             <div className="h-11 w-11 rounded-full bg-[var(--cream)] grid place-items-center shrink-0">
               <ShoppingBag className="h-5 w-5 text-[var(--primary)]" />
             </div>
-            <h2 className="font-serif text-xl">Orders</h2>
+            <h2 className="font-serif text-[20px] leading-[24px] font-medium">Orders</h2>
           </div>
           <div className="mt-4 text-center py-6">
             <div className="h-14 w-14 rounded-full bg-[var(--cream)] grid place-items-center mx-auto">
@@ -275,12 +243,7 @@ export function SellerDashboard() {
 
         {/* Next actions */}
         <div className="lg:col-span-2 surface-card p-6">
-          <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-full bg-[var(--cream)] grid place-items-center shrink-0">
-              <Sparkles className="h-5 w-5 text-[var(--primary)]" />
-            </div>
-            <h2 className="font-serif text-xl">What you can do next</h2>
-          </div>
+          <h2 className="font-serif text-[20px] leading-[24px] font-medium">What you can do next</h2>
           <ul className="mt-4 divide-y divide-[var(--border)] border border-[var(--border)] rounded-2xl overflow-hidden">
             <NextAction
               icon={Share2}
@@ -311,7 +274,7 @@ export function SellerDashboard() {
 
         {/* Store activity */}
         <div className="surface-card p-6">
-          <h2 className="font-serif text-xl">Store activity</h2>
+          <h2 className="font-serif text-[20px] leading-[24px] font-medium">Store activity</h2>
           <p className="text-sm text-[var(--muted-foreground)] mt-1">
             Your store just opened. Numbers grow as you share.
           </p>
@@ -330,10 +293,7 @@ export function SellerDashboard() {
               <HelpCircle className="h-5 w-5 text-[var(--primary)]" />
             </div>
             <div>
-              <h2 className="font-serif text-xl">Need help getting your first order?</h2>
-              <p className="text-sm text-[var(--muted-foreground)] mt-0.5">
-                Quick guides to help you start strong.
-              </p>
+              <h2 className="font-serif text-[20px] leading-[24px] font-medium">Need help getting your first order?</h2>
             </div>
           </div>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -375,7 +335,7 @@ function NextAction({
       <span className="h-9 w-9 rounded-full bg-[var(--cream)] text-[var(--primary)] grid place-items-center shrink-0">
         <Icon className="h-4 w-4" />
       </span>
-      <div className="flex-1 min-w-0 font-medium text-sm">{label}</div>
+      <div className="flex-1 min-w-0 font-medium text-[14px] leading-[20px]">{label}</div>
       <span className="text-sm font-medium text-[var(--primary)] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
         {cta} <ArrowRight className="h-3.5 w-3.5" />
       </span>
@@ -388,8 +348,8 @@ function NextAction({
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-[10px] bg-[var(--cream)]/60 border border-[var(--border)] p-3">
-      <div className="text-xs text-[var(--muted-foreground)]">{label}</div>
-      <div className="font-serif text-2xl mt-0.5">{value}</div>
+      <div className="text-[14px] leading-[20px] text-[var(--muted-foreground)]">{label}</div>
+      <div className="font-serif text-[24px] leading-[28px] font-medium mt-0.5">{value}</div>
     </div>
   );
 }
@@ -398,7 +358,7 @@ function HelpLink({ label }: { label: string }) {
   return (
     <Link
       to="/help"
-      className="flex items-center justify-between gap-2 p-3 rounded-[10px] border border-[var(--border)] hover:bg-[var(--cream)]/60 transition text-sm font-medium"
+      className="flex items-center justify-between gap-2 p-3 rounded-[10px] border border-[var(--border)] hover:bg-[var(--cream)]/60 transition text-[14px] leading-[20px] font-medium"
     >
       {label}
       <ArrowRight className="h-4 w-4 text-[var(--muted-foreground)]" />
@@ -456,7 +416,7 @@ function ShareModal({
         >
           <X className="h-4 w-4" />
         </button>
-        <h2 className="font-serif text-2xl">Share your store</h2>
+        <h2 className="font-serif text-[24px] leading-[28px] font-medium">Share your store</h2>
         <p className="text-sm text-[var(--muted-foreground)] mt-1">
           Use this link to invite customers to view your handmade products.
         </p>
@@ -469,37 +429,16 @@ function ShareModal({
         </div>
 
         <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <a
-            href={`https://wa.me/?text=${encodeURIComponent(message)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="ih-btn ih-btn-outline justify-center"
-          >
+          <a href={`https://wa.me/?text=${encodeURIComponent(message)}`} target="_blank" rel="noreferrer" className="ih-btn ih-btn-outline justify-center">
             <MessageCircle className="h-4 w-4" /> WhatsApp
           </a>
-          <a
-            href="https://www.instagram.com/"
-            target="_blank"
-            rel="noreferrer"
-            className="ih-btn ih-btn-outline justify-center"
-          >
+          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className="ih-btn ih-btn-outline justify-center">
             <Instagram className="h-4 w-4" /> Instagram
           </a>
-          <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="ih-btn ih-btn-outline justify-center"
-          >
+          <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(fullUrl)}`} target="_blank" rel="noreferrer" className="ih-btn ih-btn-outline justify-center">
             <Facebook className="h-4 w-4" /> Facebook
           </a>
-          <a
-            href={qrSrc}
-            download="store-qr.png"
-            target="_blank"
-            rel="noreferrer"
-            className="ih-btn ih-btn-outline justify-center"
-          >
+          <a href={qrSrc} download="store-qr.png" target="_blank" rel="noreferrer" className="ih-btn ih-btn-outline justify-center">
             <Download className="h-4 w-4" /> QR code
           </a>
         </div>
@@ -511,7 +450,7 @@ function ShareModal({
             className="h-28 w-28 rounded-[10px] border border-[var(--border)] bg-white p-2 shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <div className="text-[11px] uppercase tracking-wider text-[var(--muted-foreground)]">
+            <div className="text-[11px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)]">
               Message preview
             </div>
             <div className="mt-1 p-3 rounded-[10px] bg-[var(--cream)]/60 border border-[var(--border)] text-sm">

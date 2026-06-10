@@ -27,6 +27,8 @@ type FormState = {
   material: string;
   timeToMake: string;
   origin: string;
+  originState: string;
+  originCity: string;
   dimensions: string;
   weight: string;
   // multi
@@ -42,14 +44,35 @@ type FormState = {
   // pricing
   price: string;
   hsn: string;
+  gstRate: string;
 };
 
 const initial: FormState = {
-  category: "", subcategory: "", craft: "", name: "", description: "", kind: null,
-  images: [], material: "", timeToMake: "", origin: "", dimensions: "", weight: "",
-  qty: "", hasOptions: null, changes: null, changesOther: "",
-  mtoTime: "", canRequest: null, customisable: [], mtoNotes: "",
-  price: "", hsn: "",
+  category: "Handloom",
+  subcategory: "Banarasi",
+  craft: "Banarasi Silk Weaving",
+  name: "Hand-woven Banarasi Silk Dupatta",
+  description: "Handcrafted using traditional pit-loom technique by master weavers in Varanasi. Features intricate zari work with floral motifs. Each piece takes 3–5 days to weave.",
+  kind: "single",
+  images: [],
+  material: "Pure silk with zari (gold thread)",
+  timeToMake: "3–5 days",
+  origin: "Varanasi, Uttar Pradesh",
+  originState: "Uttar Pradesh",
+  originCity: "Varanasi",
+  dimensions: "2.5m x 1.1m",
+  weight: "250g",
+  qty: "8",
+  hasOptions: "no",
+  changes: null,
+  changesOther: "",
+  mtoTime: "",
+  canRequest: "yes",
+  customisable: ["colour"],
+  mtoNotes: "Custom colour combinations available on request. Min lead time 7 days.",
+  price: "2400",
+  hsn: "50077200",
+  gstRate: "5",
 };
 
 function AddProduct() {
@@ -108,14 +131,11 @@ function AddProduct() {
           <button onClick={back} className="inline-flex items-center gap-2 text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
             <ArrowLeft className="h-4 w-4" /> Back
           </button>
-          <span className="text-xs font-medium text-[var(--muted-foreground)]">
-            Step {step + 1}/{steps.length}
-          </span>
         </div>
 
         <Stepper steps={steps} current={step} />
 
-        <h2 className="mt-6 text-[24px] font-semibold tracking-tight text-[var(--foreground)]">{current}</h2>
+        <h2 className="mt-6 text-[24px] leading-[28px] font-medium text-[var(--foreground)]">{current}</h2>
 
         <div className="mt-6">
           {current === "Basic Info" && <BasicInfo f={f} update={update} />}
@@ -137,7 +157,7 @@ function AddProduct() {
       {showCongrats && <CongratsModal onContinue={goToShop} />}
 
       <style>{`
-        .ih-i{width:100%;padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:#fff;outline:none;font-size:.9rem;color:var(--foreground)}
+        .ih-i{width:100%;padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:#fff;outline:none;font-size:0.875rem;color:var(--foreground)}select.ih-i{padding-right:3rem;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
         .ih-i:focus{border-color:var(--primary)}
         .ih-i::placeholder{color:#9aa0a6}
       `}</style>
@@ -153,14 +173,14 @@ function Stepper({ steps, current }: { steps: string[]; current: number }) {
         const active = i === current;
         return (
           <div key={label} className="flex-1 flex flex-col items-center gap-3">
-            <span className={`h-9 w-9 rounded-full grid place-items-center text-sm font-semibold ${
+            <span className={`h-9 w-9 rounded-full grid place-items-center text-[11px] leading-[16px] font-semibold ${
               active ? "bg-[var(--primary)] text-white" :
               done ? "bg-[var(--primary)] text-white" :
               "bg-white border border-[var(--border)] text-[var(--muted-foreground)]"
             }`}>
               {done ? <Check className="h-4 w-4" /> : i + 1}
             </span>
-            <span className={`text-[13px] ${active ? "font-semibold text-[var(--foreground)]" : "text-[var(--muted-foreground)]"}`}>
+            <span className={`text-[14px] leading-[20px] tracking-[0.1px] ${active ? "font-semibold text-[var(--foreground)]" : "text-[var(--muted-foreground)]"}`}>
               {label}
             </span>
             <div className={`h-[2px] w-full rounded-full ${active ? "bg-[var(--primary)]" : "bg-[var(--border)]"}`} />
@@ -172,14 +192,14 @@ function Stepper({ steps, current }: { steps: string[]; current: number }) {
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-  return <div className="text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">{children}</div>;
+  return <div className="text-[14px] leading-[20px] tracking-[0.1px] font-medium text-[var(--foreground)]">{children}</div>;
 }
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div>
       <Label>{label}</Label>
       <div className="mt-2">{children}</div>
-      {hint && <p className="mt-1.5 text-xs text-[var(--muted-foreground)]">{hint}</p>}
+      {hint && <p className="mt-1.5 text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)]">{hint}</p>}
     </div>
   );
 }
@@ -277,8 +297,8 @@ function Photos({ images, onFiles, remove }: { images: string[]; onFiles: (f: Fi
           <div className="rounded-2xl border border-[var(--success)]/30 bg-[var(--success)]/5 overflow-hidden">
             <img src={photoGood} alt="Good product photo" className="aspect-square w-full object-cover" />
             <div className="p-3">
-              <div className="flex items-center gap-1.5 text-[var(--success)] font-semibold text-[13px]"><CheckCircle2 className="h-4 w-4" /> Good</div>
-              <ul className="mt-1.5 space-y-0.5 text-xs text-[var(--foreground)]/80">
+              <div className="flex items-center gap-1.5 text-[var(--success)] font-semibold text-[14px] leading-[20px] tracking-[0.1px]"><CheckCircle2 className="h-4 w-4" /> Good</div>
+              <ul className="mt-2 space-y-2 text-xs text-[var(--foreground)]/80">
                 <li>• Natural lighting</li><li>• Simple background</li><li>• Full product visible</li>
               </ul>
             </div>
@@ -286,8 +306,8 @@ function Photos({ images, onFiles, remove }: { images: string[]; onFiles: (f: Fi
           <div className="rounded-2xl border border-[var(--destructive)]/30 bg-[var(--destructive)]/5 overflow-hidden">
             <img src={photoBad} alt="Bad product photo" className="aspect-square w-full object-cover" />
             <div className="p-3">
-              <div className="flex items-center gap-1.5 text-[var(--destructive)] font-semibold text-[13px]"><XCircle className="h-4 w-4" /> Avoid</div>
-              <ul className="mt-1.5 space-y-0.5 text-xs text-[var(--foreground)]/80">
+              <div className="flex items-center gap-1.5 text-[var(--destructive)] font-semibold text-[14px] leading-[20px] tracking-[0.1px]"><XCircle className="h-4 w-4" /> Avoid</div>
+              <ul className="mt-2 space-y-2 text-xs text-[var(--foreground)]/80">
                 <li>• Blurry</li><li>• Cropped</li><li>• Cluttered</li>
               </ul>
             </div>
@@ -311,7 +331,24 @@ function Craft({ f, update }: { f: FormState; update: <K extends keyof FormState
         </select>
       </Field>
       <Field label="Where is it made?">
-        <input className="ih-i" value={f.origin} onChange={(e) => update("origin", e.target.value)} placeholder="Village, District, State" />
+        <div className="grid grid-cols-2 gap-3">
+          <select
+            className="ih-i"
+            value={f.originState}
+            onChange={(e) => { update("originState", e.target.value); update("origin", `${f.originCity ? f.originCity + ", " : ""}${e.target.value}`); }}
+          >
+            <option value="">Select state</option>
+            {["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"].map((s) => (
+              <option key={s}>{s}</option>
+            ))}
+          </select>
+          <input
+            className="ih-i"
+            value={f.originCity}
+            onChange={(e) => { update("originCity", e.target.value); update("origin", `${e.target.value ? e.target.value + ", " : ""}${f.originState}`); }}
+            placeholder="City / District"
+          />
+        </div>
       </Field>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <Field label="Dimensions" hint="Length x Width x Height (or as applicable)">
@@ -334,14 +371,14 @@ function RadioCard({ label, checked, onChange }: { label: string; checked: boole
       <span className={`h-5 w-5 rounded-full border-2 grid place-items-center ${checked ? "border-[var(--primary)]" : "border-[var(--border)]"}`}>
         {checked && <span className="h-2.5 w-2.5 rounded-full bg-[var(--primary)]" />}
       </span>
-      <span className="font-medium text-sm">{label}</span>
+      <span className="font-medium text-[14px] leading-[20px]">{label}</span>
     </button>
   );
 }
 function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick}
-      className={`h-9 px-4 rounded-full border text-[13px] font-medium transition ${
+      className={`h-9 px-4 rounded-full border text-[14px] leading-[20px] tracking-[0.1px] font-medium transition ${
         active ? "border-[var(--primary)] bg-[var(--primary)] text-white" : "border-[var(--border)] bg-white hover:bg-[var(--cream)]"
       }`}>{label}</button>
   );
@@ -355,7 +392,7 @@ function CheckCard({ label, checked, onChange }: { label: string; checked: boole
       <span className={`h-5 w-5 rounded-md border-2 grid place-items-center ${checked ? "border-[var(--primary)] bg-[var(--primary)] text-white" : "border-[var(--border)]"}`}>
         {checked && <Check className="h-3 w-3" />}
       </span>
-      <span className="font-medium text-sm">{label}</span>
+      <span className="font-medium text-[14px] leading-[20px]">{label}</span>
     </button>
   );
 }
@@ -370,7 +407,7 @@ function Variants({ f, update }: { f: FormState; update: <K extends keyof FormSt
         <div className="h-12 w-12 mx-auto rounded-2xl bg-[var(--cream)] text-[var(--primary)] grid place-items-center">
           <Package2 className="h-5 w-5" />
         </div>
-        <div className="mt-3 font-semibold">Pick a product kind first</div>
+        <div className="mt-3 font-medium text-[14px] leading-[20px]">Pick a product kind first</div>
         <div className="text-sm text-[var(--muted-foreground)] mt-1">Go back to Basic Info and tell us what type of product this is.</div>
       </div>
     );
@@ -447,11 +484,14 @@ function Pricing({ f, update }: { f: FormState; update: <K extends keyof FormSta
   const youGet = num - Math.round(num * 0.08);
   return (
     <div className="space-y-5 max-w-2xl">
-      <Field label="Selling price (₹)" hint="Your asking price before tax">
+      <Field label="Selling price (₹)" hint="Price before tax">
         <input className="ih-i" inputMode="numeric" value={f.price} onChange={(e) => update("price", e.target.value.replace(/[^\d]/g, ""))} placeholder="0" />
       </Field>
+      <Field label="HSN Code" hint={<>Determines your GST rate. <a href="https://www.cbic-gst.gov.in/gst-goods-services-rates.html" target="_blank" rel="noreferrer" className="text-[var(--primary)] underline underline-offset-2 hover:opacity-70">Find your HSN code →</a></>}>
+        <input className="ih-i" value={f.hsn} onChange={(e) => update("hsn", e.target.value)} placeholder="6 or 8 digit code" />
+      </Field>
       <div className="p-4 rounded-2xl bg-[var(--cream)] border border-[var(--primary)]/10">
-        <div className="text-[12px] font-semibold text-[var(--primary)] uppercase tracking-wider">What you'll receive</div>
+        <div className="text-[14px] leading-[20px] font-medium text-[var(--primary)]">What you'll receive</div>
         <Row label="Customer price" value={`₹${customer.toLocaleString("en-IN")}`} />
         <Row label={<span className="inline-flex items-center gap-1">GST (5%) <Info className="h-3 w-3" /></span>} value={`₹${gst.toLocaleString("en-IN")}`} />
         <div className="border-t border-[var(--primary)]/15 mt-2 pt-2">
@@ -459,15 +499,12 @@ function Pricing({ f, update }: { f: FormState; update: <K extends keyof FormSta
                value={<span className="font-bold text-[var(--primary)] text-lg">₹{youGet.toLocaleString("en-IN")}</span>} />
         </div>
       </div>
-      <Field label="HSN Code">
-        <input className="ih-i" value={f.hsn} onChange={(e) => update("hsn", e.target.value)} placeholder="6 or 8 digit code" />
-      </Field>
     </div>
   );
 }
 function Row({ label, value }: { label: React.ReactNode; value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between py-1.5 text-[13.5px]">
+    <div className="flex items-center justify-between py-1.5 text-[14px] leading-[20px]">
       <span className="text-[var(--muted-foreground)]">{label}</span>
       <span className="text-[var(--foreground)] tabular-nums">{value}</span>
     </div>
@@ -487,7 +524,7 @@ function Review({ f, onEdit, steps }: { f: FormState; onEdit: (n: number) => voi
           <div className="text-xs text-[var(--muted-foreground)] inline-flex items-center gap-1.5">
             <Package2 className="h-3 w-3" /> {f.category || "—"}{f.craft ? ` · ${f.craft}` : ""}
           </div>
-          <div className="mt-1 text-[18px] font-semibold tracking-tight">{f.name || "Product Name"}</div>
+          <div className="mt-1 text-[20px] leading-[24px] font-medium">{f.name || "Product Name"}</div>
           <div className="mt-1 text-[var(--primary)] font-semibold">₹{price.toLocaleString("en-IN")}</div>
         </div>
       </div>
@@ -505,12 +542,12 @@ function ReviewSection({ title, items, onEdit }: { title: string; items: [string
   return (
     <div className="rounded-2xl bg-white border border-[var(--border)] p-4">
       <div className="flex items-center justify-between mb-2">
-        <div className="font-semibold text-sm">{title}</div>
+        <div className="font-medium text-[14px] leading-[20px]">{title}</div>
         <button onClick={onEdit} className="text-xs text-[var(--primary)] font-medium">Edit</button>
       </div>
       <div className="space-y-1">
         {items.map(([k, v]) => (
-          <div key={k} className="flex justify-between text-[13px]">
+          <div key={k} className="flex justify-between text-[14px] leading-[20px] tracking-[0.1px]">
             <span className="text-[var(--muted-foreground)]">{k}</span>
             <span className="text-[var(--foreground)]">{v}</span>
           </div>
@@ -528,7 +565,7 @@ function CongratsModal({ onContinue }: { onContinue: () => void }) {
         <div className="mx-auto h-16 w-16 rounded-2xl bg-[var(--primary)] text-white grid place-items-center">
           <Sparkles className="h-7 w-7" />
         </div>
-        <h2 className="mt-5 text-center text-[22px] font-bold tracking-tight">Congratulations 🎉</h2>
+        <h2 className="mt-5 text-center text-[22px] font-bold tracking-tight">Congratulations</h2>
         <p className="mt-2 text-center text-sm text-[var(--muted-foreground)]">
           You've added your first product. Your shop is now live on India Handmade.
         </p>

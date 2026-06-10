@@ -30,7 +30,7 @@ function Products() {
     <AppShell>
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="font-serif text-[26px] leading-tight">All products</h1>
+          <h1 className="font-serif text-[28px] leading-[32px] leading-tight">All products</h1>
           <p className="text-sm text-[var(--muted-foreground)] mt-1">Manage your full catalogue.</p>
         </div>
         <Link to="/add-product" className="ih-btn ih-btn-primary">
@@ -59,7 +59,7 @@ function Products() {
       </div>
 
       <div className="surface-card">
-        <div className="grid grid-cols-[1.7fr_120px_90px_140px_80px] px-6 py-2 bg-[var(--cream)] text-[10px] uppercase tracking-wider text-[var(--muted-foreground)] font-medium">
+        <div className="grid grid-cols-[1.7fr_120px_90px_140px_80px] px-6 py-2 bg-[var(--cream)] text-[11px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)] font-medium">
           <div>Product</div><div>Price</div><div>Stock</div><div>Status</div><div></div>
         </div>
         <ul className="divide-y divide-[var(--border)]">

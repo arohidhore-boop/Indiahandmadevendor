@@ -18,7 +18,7 @@ import { BrandMark } from "./BrandMark";
 import { useIH } from "@/lib/ih-store";
 
 const nav = [
-  { to: "/post", label: "Post", icon: Home },
+  { to: "/post", label: "Dashboard", icon: Home },
   { to: "/products", label: "Products", icon: LayoutGrid },
   { to: "/orders", label: "Orders", icon: ClipboardList },
   { to: "/earnings", label: "Earnings", icon: IndianRupee },
@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen w-full flex flex-col bg-[var(--cream)]">
       <GovBar />
-      <header className="h-[72px] bg-white border-b border-[var(--border)] flex items-center px-6 lg:px-10">
+      <header className="sticky top-0 z-30 h-[72px] bg-white border-b border-[var(--border)] flex items-center px-6 lg:px-10">
         <BrandMark />
         <div className="ml-auto flex items-center gap-5">
           <button aria-label="Notifications" className="relative h-10 w-10 grid place-items-center rounded-[8px] hover:bg-[var(--cream)]">
@@ -56,9 +56,9 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex-1 flex w-full" id="main">
         <aside
-          className={`${collapsed ? "w-[88px]" : "w-[260px]"} shrink-0 relative transition-[width] duration-300`}
+          className={`${collapsed ? "w-[88px]" : "w-[260px]"} shrink-0 relative transition-[width] duration-300 overflow-visible z-10`}
         >
-          <div className={`sticky top-0 my-4 ${collapsed ? "mx-2" : "mx-4"} bg-white border border-[var(--border)] rounded-2xl shadow-[var(--shadow-soft)] min-h-[calc(100vh-120px)] flex flex-col`}>
+          <div className={`sticky top-[72px] mt-8 mb-4 ${collapsed ? "mx-2" : "mx-4"} bg-white border border-[var(--border)] rounded-2xl shadow-[var(--shadow-soft)] min-h-[calc(100vh-120px)] flex flex-col overflow-visible`}>
             {!collapsed && (
               <div className="px-5 pt-5 pb-2 text-[11px] uppercase tracking-[0.16em] text-[var(--muted-foreground)]">
                 Menu
@@ -95,14 +95,14 @@ export function AppShell({ children }: { children: ReactNode }) {
                 {!collapsed && <span>Log out</span>}
               </Link>
             </div>
+            <button
+              onClick={() => setCollapsed((c) => !c)}
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              className="absolute top-1/2 -right-4 -translate-y-1/2 z-20 h-10 w-10 rounded-[8px] bg-white border border-[var(--border)] grid place-items-center text-[var(--primary)] hover:bg-[var(--cream)] shadow-[var(--shadow-soft)]"
+            >
+              {collapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
+            </button>
           </div>
-          <button
-            onClick={() => setCollapsed((c) => !c)}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="absolute top-1/2 -right-4 -translate-y-1/2 h-10 w-10 rounded-[8px] bg-white border border-[var(--border)] grid place-items-center text-[var(--primary)] hover:bg-[var(--cream)] shadow-[var(--shadow-soft)]"
-          >
-            {collapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
-          </button>
         </aside>
 
         <main className="flex-1 min-w-0 pl-2 pr-6 lg:pr-10 py-8">

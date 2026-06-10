@@ -32,9 +32,12 @@ function Verify() {
   return (
     <AuthShell step={2} totalSteps={5}>
       <div className="surface-card p-8 text-center">
-        <h1 className="font-serif text-3xl">Verify your email</h1>
+        <h1 className="font-serif text-[28px] leading-[32px] font-medium">Verify your email</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-2">
           We sent a 6-digit code to your inbox.
+        </p>
+        <p className="text-[12px] leading-[16px] text-[var(--primary)] mt-1">
+          Demo: enter any 6 digits to continue
         </p>
         <div className="mt-7 flex items-center justify-center gap-2">
           {digits.map((d, i) => (
@@ -45,7 +48,7 @@ function Verify() {
               maxLength={1}
               value={d}
               onChange={(e) => update(i, e.target.value)}
-              className="h-14 w-12 text-center text-2xl font-serif rounded-[10px] border border-[var(--border)] bg-white focus:border-[var(--primary)] outline-none"
+              className="h-14 w-12 text-center text-[24px] font-serif rounded-[10px] border border-[var(--border)] bg-white focus:border-[var(--primary)] outline-none"
             />
           ))}
         </div>

@@ -27,13 +27,13 @@ function Earnings() {
   return (
     <AppShell>
       <div>
-        <h1 className="font-serif text-[26px]">Earnings</h1>
+        <h1 className="font-serif text-[28px] leading-[32px]">Earnings</h1>
         <p className="text-sm text-[var(--muted-foreground)] mt-1">Track your sales and payouts.</p>
       </div>
 
       <div className="surface-card p-7 grid lg:grid-cols-3 gap-6">
         <div>
-          <div className="text-xs uppercase tracking-wider text-[var(--muted-foreground)]">This month</div>
+          <div className="text-[12px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)]">This month</div>
           <div className="rupee font-sans" style={{ fontSize: 44 }}>₹ 24,560</div>
           <div className="text-sm text-[var(--success)] mt-1">+11% vs last month</div>
         </div>
@@ -70,9 +70,9 @@ function Earnings() {
 
       <div className="surface-card">
         <div className="p-6 border-b border-[var(--border)]">
-          <h3 className="font-serif text-xl">Payout history</h3>
+          <h3 className="font-serif text-[20px] leading-[24px] font-medium">Payout history</h3>
         </div>
-        <div className="grid grid-cols-[1fr_140px_120px_1fr] px-6 py-2 bg-[var(--cream)] text-[10px] uppercase tracking-wider text-[var(--muted-foreground)] font-medium">
+        <div className="grid grid-cols-[1fr_140px_120px_1fr] px-6 py-2 bg-[var(--cream)] text-[11px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)] font-medium">
           <div>Date</div><div>Amount</div><div>Status</div><div>UTR</div>
         </div>
         <ul className="divide-y divide-[var(--border)]">
