@@ -64,20 +64,21 @@ function Signup() {
             nav({ to: "/verify" });
           }}
           className="space-y-4"
+          noValidate
         >
           <Field label="Email">
             <input type="email" className="ih-input" placeholder="you@example.in" defaultValue="demo@indiahandmade.in" />
           </Field>
           <Field label="Password">
             <div className="relative">
-              <input type={show ? "text" : "password"} minLength={6} className="ih-input pr-10" defaultValue="demo1234" />
+              <input type={show ? "text" : "password"}  className="ih-input pr-10" defaultValue="demo1234" />
               <button type="button" onClick={() => setShow((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" aria-label="Toggle password">
                 {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
           </Field>
           <Field label="Confirm password">
-            <input type={show ? "text" : "password"} minLength={6} className="ih-input" defaultValue="demo1234" />
+            <input type={show ? "text" : "password"}  className="ih-input" defaultValue="demo1234" />
           </Field>
           <button className="ih-btn ih-btn-primary ih-btn-full">
             Continue
