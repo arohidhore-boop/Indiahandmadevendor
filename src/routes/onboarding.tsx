@@ -184,12 +184,12 @@ function Stepper({
                 <div className="flex items-center gap-2">
                   <span
                     className={`h-6 w-6 shrink-0 rounded-full grid place-items-center text-[11px] font-semibold ${
-                      done
+                      active
+                        ? "bg-[var(--primary)] text-white"
+                        : done
                         ? "bg-[var(--success)] text-white"
                         : attn
                         ? "bg-[var(--destructive)] text-white"
-                        : active
-                        ? "bg-[var(--primary)] text-white"
                         : "bg-[var(--cream)] text-[var(--muted-foreground)]"
                     }`}
                   >
@@ -239,7 +239,7 @@ function Field({
 }
 
 const inputCls =
-  "w-full px-4 py-3 rounded-[10px] border border-[var(--border)] bg-white text-[14px] leading-[20px] outline-none focus:border-[var(--primary)] transition disabled:bg-[var(--cream)]/40 disabled:text-[var(--muted-foreground)]";
+  "w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-white text-[14px] leading-[20px] outline-none focus:border-[var(--primary)] transition disabled:bg-[var(--cream)]/40 disabled:text-[var(--muted-foreground)]";
 
 function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${inputCls} ${props.className ?? ""}`} />;
@@ -272,7 +272,7 @@ function FileDrop({
         const f = e.dataTransfer.files?.[0];
         if (f) onChange(f.name);
       }}
-      className={`rounded-[10px] border-2 border-dashed p-4 text-center text-sm transition ${
+      className={`rounded-xl border-2 border-dashed p-4 text-center text-[14px] leading-[20px] transition ${
         drag ? "border-[var(--primary)] bg-[var(--primary)]/5" : "border-[var(--border)] bg-[var(--cream)]/30"
       }`}
     >
@@ -317,7 +317,7 @@ function OptionRow({
     <button
       type="button"
       onClick={onClick}
-      className={`w-full text-left px-4 py-3 rounded-[10px] border-2 text-[14px] leading-[20px] transition flex items-start gap-3 ${
+      className={`w-full text-left px-4 py-3 rounded-xl border-2 text-[14px] leading-[20px] transition flex items-start gap-3 ${
         active
           ? "border-[var(--primary)] bg-[var(--primary)]/5"
           : "border-[var(--border)] bg-white hover:border-[var(--primary)]/40"
@@ -418,77 +418,60 @@ function Step1Gst({
               className="tracking-wider"
             />
           </Field>
-          <button
-            type="button"
-            onClick={fetchDetails}
-            disabled={!data.gstNumber || data.gstNumber.length < 5 || fetching}
-            className="ih-btn ih-btn-outline"
-          >
-            {fetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-            {fetching ? "Fetching…" : data.fetched ? "Refetch details" : "Fetch details"}
-          </button>
+          <div className="flex items-center gap-3 flex-wrap">
+            <button
+              type="button"
+              onClick={fetchDetails}
+              disabled={!data.gstNumber || data.gstNumber.length < 5 || fetching}
+              className="ih-btn ih-btn-outline"
+            >
+              {fetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+              {fetching ? "Fetching…" : "Fetch details"}
+            </button>
+            <a
+              href="https://reg.gst.gov.in/registration/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ih-btn ih-btn-ghost text-[var(--primary)] px-0"
+            >
+              Get GST number <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
         </div>
+      )}
+
+      {data.fetched && data.gstNumber && choice === "yes_gst" && (
+        <ConfirmCard data={data} />
       )}
 
       {choice === "eid" && (
         <div className="space-y-4 animate-fade-up">
-          <div className="flex flex-wrap items-start gap-4">
-            <div className="flex-1 min-w-[240px]">
-              <Field
-                label="Enter Enrolment ID / UIN"
-                required
-                error={errors.eidNumber}
-              >
-                <TextInput
-                  value={data.eidNumber ?? ""}
-                  onChange={(e) => set("eidNumber", e.target.value.toUpperCase())}
-                  placeholder="292600069119ESX"
-                  className="tracking-wider"
-                />
-              </Field>
-            </div>
-            {data.fetched ? (
-              <div className="flex items-center gap-2 mt-7 text-[var(--success)] font-medium">
-                <span className="h-5 w-5 rounded-full bg-[var(--success)] text-white inline-flex items-center justify-center">
-                  <Check className="h-3 w-3" />
-                </span>
-                Verified
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={fetchDetails}
-                disabled={!data.eidNumber || data.eidNumber.length < 5 || fetching}
-                className="ih-btn ih-btn-outline mt-7"
-              >
-                {fetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-                {fetching ? "Verifying…" : "Verify"}
-              </button>
-            )}
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--cream)]/40 px-4 py-3 space-y-1">
+            <p className="text-[14px] leading-[20px] font-medium text-[var(--foreground)]">What is an Enrolment ID (EID)?</p>
+            <p className="text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)]">
+              An EID lets you sell on e-commerce platforms within your state without a GST number.
+            </p>
+            <a href="https://udyamregistration.gov.in/" target="_blank" rel="noopener noreferrer" className="text-[14px] leading-[20px] font-medium text-[var(--primary)] hover:underline inline-flex items-center gap-1 mt-1">
+              Get your EID number <ArrowRight className="h-4 w-4" />
+            </a>
           </div>
-
-          {data.fetched && (
-            <div className="animate-fade-up">
-              <h3 className="font-semibold text-[var(--foreground)] mb-3">
-                Below details are linked to your enrolment ID
-              </h3>
-              <div className="border-l-2 border-[var(--success)] pl-4 space-y-4">
-                <div>
-                  <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">Name</div>
-                  <div className="font-medium mt-0.5">{data.legalName ?? "—"}</div>
-                </div>
-                <div>
-                  <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">PAN Number</div>
-                  <div className="font-medium mt-0.5">{data.pan ?? "—"}</div>
-                </div>
-                <div>
-                  <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">Registered Business Address</div>
-                  <div className="font-medium mt-0.5">{data.registeredAddress ?? "—"}</div>
-                </div>
-              </div>
-            </div>
-          )}
-
+          <Field label="Enter Enrolment ID" required error={errors.eidNumber}>
+            <TextInput
+              value={data.eidNumber ?? ""}
+              onChange={(e) => set("eidNumber", e.target.value.toUpperCase())}
+              placeholder="292600069119ESX"
+              className="tracking-wider"
+            />
+          </Field>
+          <button
+            type="button"
+            onClick={fetchDetails}
+            disabled={!data.eidNumber || data.eidNumber.length < 5 || fetching}
+            className="ih-btn ih-btn-outline"
+          >
+            {fetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+            {fetching ? "Fetching…" : "Fetch details"}
+          </button>
           {!data.fetched && (
             <a
               href="https://udyamregistration.gov.in/"
@@ -502,23 +485,21 @@ function Step1Gst({
         </div>
       )}
 
-      {data.fetched && choice === "yes_gst" && (
-        <ConfirmCard data={data} />
+      {data.fetched && data.eidNumber && data.eidNumber.length >= 15 && choice === "eid" && (
+        <ConfirmCard data={data} source="eid" />
       )}
+
 
     </div>
   );
 }
 
-function ConfirmCard({ data }: { data: OnboardingData }) {
+function ConfirmCard({ data, source }: { data: OnboardingData; source?: "gst" | "eid" }) {
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-white p-5 animate-fade-up">
+    <div className="rounded-xl border border-[var(--border)] bg-white p-5 shadow-sm hover:shadow-md hover:border-[var(--primary)]/30 transition-all animate-fade-up">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] flex items-center gap-1.5">
-            <Lock className="h-3 w-3" /> Official details fetched
-          </div>
-          <h3 className="font-serif text-[22px] leading-[28px] font-medium mt-1">Confirm your business details</h3>
+        <div className="flex items-center gap-2 text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">
+          <Lock className="h-3.5 w-3.5 shrink-0" /> Official details fetched
         </div>
       </div>
 
@@ -533,8 +514,8 @@ function ConfirmCard({ data }: { data: OnboardingData }) {
         <ReadField label="CIN (auto-fetched)" value={data.cin} />
       </dl>
 
-      <p className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] mt-4">
-        Official GST data is read-only. You can edit your shop name, addresses and contact person in later steps.
+      <p className="text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)] italic mt-4">
+        * These details have been fetched from your {source === "eid" ? "Enrolment ID" : "GST number"}.
       </p>
     </div>
   );
@@ -586,7 +567,7 @@ function Step2Shop({ data, set, errors }: StepProps) {
           <Field
             label="Public shop name"
             required
-            hint="This is the name buyers will see on India Handmade."
+
             error={errors.publicShopName}
           >
             <TextInput
@@ -616,6 +597,17 @@ function Step2Shop({ data, set, errors }: StepProps) {
           />
         </Field>
 
+        <div className="sm:col-span-2">
+          <Field label="Shop description (optional)">
+            <TextArea
+              rows={3}
+              value={data.shopDescription ?? ""}
+              onChange={(e) => set("shopDescription", e.target.value)}
+              placeholder="Tell buyers what makes your shop special — your craft, story, or region"
+            />
+          </Field>
+        </div>
+
       </div>
 
     </div>
@@ -634,26 +626,25 @@ function Step3Address({ data, set, errors }: StepProps) {
   const hasGstAddress = !!data.registeredAddress;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-serif text-[20px] leading-[24px] font-medium">Confirm your address</h2>
-        <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-1">
-          We use these to send official communication and pick up your parcels.
-        </p>
-      </div>
+    <div className="space-y-4">
+      <h2 className="font-serif text-[20px] leading-[24px] font-medium">Address details</h2>
 
       {hasGstAddress && (
-        <div>
-          <div className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)] flex items-center gap-1.5">
-            <Lock className="h-3 w-3" /> Registered address from GST
+        <div className="space-y-4">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--cream)]/40 px-4 py-3">
+            <div className="text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)] flex items-center gap-1.5">
+              <Lock className="h-3 w-3" /> Registered address from GST
+            </div>
+            {data.legalName && <p className="text-[14px] leading-[20px] font-medium mt-2">{data.legalName}</p>}
+            <p className="text-[14px] leading-[20px] mt-0.5">{data.registeredAddress}</p>
+            <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-0.5">
+              {data.fetchedState} · {data.fetchedPincode}
+            </p>
           </div>
-          <p className="text-[14px] leading-[20px] font-medium mt-2">{data.registeredAddress}</p>
-          <p className="text-[14px] leading-[20px] font-medium mt-1">
-            {data.fetchedState} · {data.fetchedPincode}
-          </p>
 
-          <div className="mt-4 text-[14px] leading-[20px] font-medium">Can we use this as your communication address?</div>
-          <div className="grid sm:grid-cols-2 gap-3 mt-2">
+          <div>
+            <div className="text-[14px] leading-[20px] font-medium mb-2">Can we use this as your communication address?</div>
+          <div className="grid sm:grid-cols-2 gap-3">
             <OptionRow
               active={data.useGstAddress === true}
               onClick={() => {
@@ -670,6 +661,7 @@ function Step3Address({ data, set, errors }: StepProps) {
               label="No, add a different communication address"
             />
           </div>
+          </div>
         </div>
       )}
 
@@ -685,7 +677,7 @@ function Step3Address({ data, set, errors }: StepProps) {
       )}
 
       <div className="pt-5 border-t border-[var(--border)] space-y-3">
-        <div className="text-sm font-medium">Is your pickup address the same as your communication address?</div>
+        <div className="text-[14px] leading-[20px] tracking-[0.1px] font-medium">Is your pickup address the same as your communication address?</div>
         <div className="grid sm:grid-cols-2 gap-3">
           <OptionRow
             active={data.pickupSameAsComm === true}
@@ -826,7 +818,7 @@ function Step4Bank({ data, set, errors }: StepProps) {
             placeholder="As per bank records"
           />
         </Field>
-        <Field label="IFSC code" required hint="Bank and branch will auto-fill" error={errors.ifsc}>
+        <Field label="IFSC code" required error={errors.ifsc}>
           <TextInput
             value={data.ifsc ?? ""}
             onChange={(e) => set("ifsc", e.target.value.toUpperCase())}
@@ -859,7 +851,7 @@ function Step4Bank({ data, set, errors }: StepProps) {
       </div>
 
       <Field
-        label="Upload bank proof"
+        label="Upload bank proof" required
       >
         <FileDrop
           value={data.bankProofDoc}
@@ -880,7 +872,7 @@ function BankStatusBadge({ status }: { status: BankStatus }) {
   };
   const { label, cls } = map[status];
   return (
-    <div className="flex items-center gap-2 text-sm">
+    <div className="flex items-center gap-2 text-[14px] leading-[20px]">
       <span className="text-[var(--muted-foreground)]">Bank verification:</span>
       <span className={`px-2.5 py-1 rounded-full text-[11px] font-medium ${cls}`}>{label}</span>
     </div>
@@ -1001,19 +993,19 @@ function ReviewSection({
   extra?: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-[var(--border)] bg-white p-5">
+    <section className="rounded-xl border border-[var(--border)] bg-white p-5 shadow-sm hover:shadow-md hover:border-[var(--primary)]/30 transition-all">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="h-9 w-9 rounded-full bg-[var(--cream)] grid place-items-center">
             <Icon className="h-4 w-4 text-[var(--primary)]" />
           </span>
-          <h3 className="font-serif text-[22px] leading-[28px] font-medium">{title}</h3>
+          <h3 className="font-serif text-[20px] leading-[24px] font-medium">{title}</h3>
         </div>
-        <button onClick={onEdit} className="text-sm text-[var(--primary)] inline-flex items-center gap-1 hover:underline">
+        <button onClick={onEdit} className="text-[14px] leading-[20px] text-[var(--primary)] inline-flex items-center gap-1 hover:underline">
           <Pencil className="h-3.5 w-3.5" /> Edit
         </button>
       </div>
-      <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+      <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2">
         {rows.map(([k, v]) => (
           <div key={k}>
             <dt className="text-[12px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)]">{k}</dt>

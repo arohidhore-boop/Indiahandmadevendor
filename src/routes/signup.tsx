@@ -80,7 +80,7 @@ function Signup() {
           <Field label="Confirm password">
             <input type={show ? "text" : "password"}  className="ih-input" defaultValue="demo1234" />
           </Field>
-          <button className="ih-btn ih-btn-primary ih-btn-full">
+          <button type="button" onClick={() => nav({ to: "/verify" })} className="ih-btn ih-btn-primary ih-btn-full">
             Continue
           </button>
         </form>

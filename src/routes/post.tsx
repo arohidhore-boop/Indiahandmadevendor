@@ -131,7 +131,7 @@ function HomeOnboarding({
             </div>
             <h2 className="font-serif text-[24px] leading-[28px] font-medium mt-5">Congratulations!</h2>
             <p className="text-sm text-[var(--muted-foreground)] mt-2">
-              You are now registered on India Handmade. Complete your profile to start selling.
+              Your account is now open on India Handmade. Complete your profile to start selling.
             </p>
             <button onClick={dismissOverlay} className="ih-btn ih-btn-primary mt-6 w-full justify-center">
               Continue

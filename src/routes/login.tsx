@@ -44,7 +44,7 @@ function Login() {
           <div className="text-right">
             <a className="text-sm text-[var(--primary)] hover:underline">Forgot password?</a>
           </div>
-          <button className="ih-btn ih-btn-primary ih-btn-full">
+          <button type="button" onClick={() => nav({ to: "/post" })} className="ih-btn ih-btn-primary ih-btn-full">
             Sign In
           </button>
         </form>

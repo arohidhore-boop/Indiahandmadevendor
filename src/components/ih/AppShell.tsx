@@ -105,7 +105,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </aside>
 
-        <main className="flex-1 min-w-0 pl-2 pr-6 lg:pr-10 py-8">
+        <main className="flex-1 min-w-0 pl-2 pr-6 lg:pr-10 pt-8 pb-8">
           <div className="max-w-[1100px] space-y-6 animate-fade-up">{children}</div>
         </main>
       </div>

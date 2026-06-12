@@ -49,6 +49,7 @@ export type OnboardingData = {
 
   // Step 2 — Shop profile
   publicShopName?: string;
+  shopDescription?: string;
   sellerType?: string;
   contactName?: string;
   mobile?: string;
