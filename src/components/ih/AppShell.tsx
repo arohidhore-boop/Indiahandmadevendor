@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen w-full flex flex-col bg-[var(--cream)]">
       <GovBar />
-      <header className="sticky top-0 z-30 h-[72px] bg-white border-b border-[var(--border)] flex items-center px-6 lg:px-10">
+      <header className="sticky top-0 z-30 h-[72px] bg-white border-b border-[var(--border)] flex items-center px-6 lg:px-10" style={{ transform: "translateZ(0)" }}>
         <BrandMark />
         <div className="ml-auto flex items-center gap-5">
           <button aria-label="Notifications" className="relative h-10 w-10 grid place-items-center rounded-[8px] hover:bg-[var(--cream)]">
@@ -56,7 +56,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex-1 flex w-full" id="main">
         <aside
-          className={`${collapsed ? "w-[88px]" : "w-[260px]"} shrink-0 relative transition-[width] duration-300 overflow-visible z-10`}
+          className={`${collapsed ? "w-[88px]" : "w-[260px]"} shrink-0 relative transition-[width] duration-300 overflow-visible`}
         >
           <div className={`sticky top-[72px] mt-8 mb-4 ${collapsed ? "mx-2" : "mx-4"} bg-white border border-[var(--border)] rounded-2xl shadow-[var(--shadow-soft)] min-h-[calc(100vh-120px)] flex flex-col overflow-visible`}>
             {!collapsed && (

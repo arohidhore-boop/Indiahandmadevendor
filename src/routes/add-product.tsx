@@ -524,7 +524,7 @@ function VariantTags({ label, hint, values, onChange, suggestions, showSwatch = 
             </button>
           ))}
           <div className="flex gap-1.5">
-            <input ref={inputRef}
+            <input ref={inputRef} type="text" autoComplete="off"
               className="h-8 px-3 rounded-full border border-dashed border-[var(--border)] text-[12px] w-32 outline-none focus:border-[var(--primary)] bg-white"
               placeholder="Other…" />
             <button type="button" onClick={addFromRef}
@@ -535,7 +535,7 @@ function VariantTags({ label, hint, values, onChange, suggestions, showSwatch = 
         </div>
       ) : (
         <div className="mt-3 flex gap-2 items-center">
-          <input ref={inputRef}
+          <input ref={inputRef} type="text" autoComplete="off"
             className="h-9 px-3 rounded-lg border border-[var(--border)] focus:border-[var(--primary)] text-[14px] leading-[20px] outline-none bg-white w-44"
             placeholder="e.g. Red" />
           <button type="button" onClick={addFromRef}
