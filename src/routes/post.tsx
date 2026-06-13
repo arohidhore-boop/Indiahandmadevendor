@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import {
   ArrowRight,
   Check,
@@ -20,7 +19,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/ih/AppShell";
 import { SellerDashboard } from "@/components/ih/SellerDashboard";
-import { useIH, type OnboardingStatus, type BankStatus } from "@/lib/ih-store";
+import { useIH, ihStore, type OnboardingStatus, type BankStatus } from "@/lib/ih-store";
 
 export const Route = createFileRoute("/post")({
   head: () => ({ meta: [{ title: "Post — India Handmade" }] }),
@@ -50,37 +49,65 @@ function Home() {
   };
 
   const statuses = onboarding.statuses;
-  const profileCompleted = PROFILE_STEPS.every((s) => statuses[s.n] === "completed");
-  const completedSteps = PROFILE_STEPS.filter((s) => statuses[s.n] === "completed").length;
-  const firstProductDone = onboarding.firstProductAdded;
-  const totalSteps = PROFILE_STEPS.length + 1; // + first product
+  const profileCompleted = !justRegistered && PROFILE_STEPS.every((s) => statuses[s.n] === "completed");
+  const completedSteps = justRegistered ? 0 : PROFILE_STEPS.filter((s) => statuses[s.n] === "completed").length;
+  const firstProductDone = !justRegistered && onboarding.firstProductAdded;
+  const totalSteps = PROFILE_STEPS.length + 1;
   const totalCompleted = completedSteps + (firstProductDone ? 1 : 0);
   const pct = Math.round((totalCompleted / totalSteps) * 100);
-  const nextStep = PROFILE_STEPS.find((s) => statuses[s.n] !== "completed");
+  const displayStatuses = justRegistered
+    ? Object.fromEntries(PROFILE_STEPS.map((s) => [s.n, "not_started" as const]))
+    : statuses;
+  const nextStep = PROFILE_STEPS.find((s) => displayStatuses[s.n] !== "completed");
 
   const showSellerDashboard = profileCompleted && firstProductDone;
 
   return (
-    <AppShell>
-      {showSellerDashboard ? (
-        <SellerDashboard />
-      ) : (
-        <HomeOnboarding
-          justRegistered={justRegistered}
-          dismissOverlay={dismissOverlay}
-          seller={seller}
-          profileCompleted={profileCompleted}
-          completedSteps={completedSteps}
-          firstProductDone={firstProductDone}
-          totalSteps={totalSteps}
-          totalCompleted={totalCompleted}
-          pct={pct}
-          nextStep={nextStep}
-          statuses={statuses}
-          onboarding={onboarding}
-        />
+    <>
+      {justRegistered && (
+        <div className="fixed inset-0 z-[100] grid place-items-center bg-black/50 animate-fade-in p-4">
+          <div className="relative max-w-md w-full surface-card p-8 text-center animate-fade-up">
+            <button
+              onClick={() => { sessionStorage.removeItem("justRegistered"); window.location.href = "/post"; }}
+              className="absolute top-3 right-3 h-8 w-8 grid place-items-center rounded-full hover:bg-[var(--cream)] text-[var(--muted-foreground)]"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <div className="h-16 w-16 rounded-full bg-[var(--primary)]/10 grid place-items-center mx-auto">
+              <PartyPopper className="h-8 w-8 text-[var(--primary)]" />
+            </div>
+            <h2 className="font-serif text-[24px] leading-[28px] font-medium mt-5">Congratulations!</h2>
+            <p className="text-sm text-[var(--muted-foreground)] mt-2">
+              Your account is now open on India Handmade. Complete your profile to start selling.
+            </p>
+            <button type="button" onClick={() => { sessionStorage.removeItem("justRegistered"); window.location.href = "/post"; }} className="ih-btn ih-btn-primary mt-6 w-full justify-center">
+              Complete your profile
+            </button>
+          </div>
+        </div>
       )}
-    </AppShell>
+      <AppShell>
+        {showSellerDashboard && !justRegistered ? (
+          <SellerDashboard />
+        ) : (
+          <HomeOnboarding
+            justRegistered={justRegistered}
+            dismissOverlay={dismissOverlay}
+            seller={seller}
+            profileCompleted={profileCompleted}
+            completedSteps={completedSteps}
+            firstProductDone={firstProductDone}
+            totalSteps={totalSteps}
+            totalCompleted={totalCompleted}
+            pct={pct}
+            nextStep={nextStep}
+            statuses={displayStatuses}
+            onboarding={onboarding}
+          />
+        )}
+      </AppShell>
+    </>
   );
 }
 
@@ -115,31 +142,6 @@ function HomeOnboarding({
 }: HomeOnboardingProps) {
   return (
     <>
-
-      {justRegistered && typeof document !== "undefined" && createPortal(
-        <div className="fixed inset-0 z-[100] grid place-items-center bg-black/50 animate-fade-in p-4">
-          <div className="relative max-w-md w-full surface-card p-8 text-center animate-fade-up">
-            <button
-              onClick={dismissOverlay}
-              className="absolute top-3 right-3 h-8 w-8 grid place-items-center rounded-full hover:bg-[var(--cream)] text-[var(--muted-foreground)]"
-              aria-label="Close"
-            >
-              <X className="h-4 w-4" />
-            </button>
-            <div className="h-16 w-16 rounded-full bg-[var(--primary)]/10 grid place-items-center mx-auto">
-              <PartyPopper className="h-8 w-8 text-[var(--primary)]" />
-            </div>
-            <h2 className="font-serif text-[24px] leading-[28px] font-medium mt-5">Congratulations!</h2>
-            <p className="text-sm text-[var(--muted-foreground)] mt-2">
-              Your account is now open on India Handmade. Complete your profile to start selling.
-            </p>
-            <button onClick={dismissOverlay} className="ih-btn ih-btn-primary mt-6 w-full justify-center">
-              Continue
-            </button>
-          </div>
-        </div>,
-        document.body
-      )}
 
       {/* Welcome */}
       <div>
@@ -227,6 +229,10 @@ function HomeOnboarding({
                   </div>
                   {firstProductDone ? (
                     <StatusBadge status="completed" />
+                  ) : profileCompleted ? (
+                    <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[var(--success)]/10 text-[var(--success)]">
+                      <Sparkles className="h-3 w-3" /> Ready
+                    </span>
                   ) : (
                     <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[var(--cream)] text-[var(--muted-foreground)]">
                       <Lock className="h-3 w-3" /> Locked
@@ -258,9 +264,8 @@ function HomeOnboarding({
           </div>
         </div>
 
-        {/* RIGHT — Add first product + guide */}
+        {/* RIGHT — guide */}
         <div className="flex flex-col gap-4">
-          <FirstProductCard locked={!profileCompleted} done={firstProductDone} />
           <QuickAction icon={BookOpen} label="View seller guide" to="/help" />
         </div>
       </div>

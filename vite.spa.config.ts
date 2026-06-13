@@ -15,6 +15,9 @@ export default defineConfig({
     tailwindcss(),
     tsconfigPaths(),
   ],
+  server: {
+    allowedHosts: true,
+  },
   build: {
     outDir: "dist/spa",
   },

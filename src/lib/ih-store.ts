@@ -143,12 +143,12 @@ const defaults: State = {
   onboarding: {
     data: {
       // Step 1 — GST
-      gstChoice: "gst",
+      gstChoice: "yes_gst",
       gstNumber: "27AABCS1429B1ZB",
       fetched: true,
       legalName: "Samba Sakhi Crafts Producer Company Limited",
       tradeName: "Samba Sakhi Crafts",
-      registeredAddress: "12 Old City Road, Pink City, Jaipur",
+      registeredAddress: "12 Old City Road, Pink City, Jaipur Urban, Rajasthan Pincode - 302002",
       registrationStatus: "Active",
       fetchedState: "Rajasthan",
       fetchedPincode: "302002",
@@ -161,9 +161,7 @@ const defaults: State = {
       mobile: "9876543210",
       // Step 3 — Address
       useGstAddress: true,
-      commLine1: "12 Old City Road, Pink City, Jaipur",
-      commState: "Rajasthan",
-      commPincode: "302002",
+      commLine1: "12 Old City Road, Pink City, Jaipur Urban, Rajasthan Pincode - 302002",
       commMobile: "9876543210",
       pickupSameAsComm: true,
       returnSameAsPickup: true,
@@ -222,6 +220,10 @@ export const ihStore = {
   },
   setOnboardingStatus(step: number, status: OnboardingStatus) {
     state = { ...state, onboarding: { ...state.onboarding, statuses: { ...state.onboarding.statuses, [step]: status } } };
+    persist();
+  },
+  resetOnboarding() {
+    state = { ...state, onboarding: { ...defaults.onboarding, data: defaults.onboarding.data } };
     persist();
   },
 };

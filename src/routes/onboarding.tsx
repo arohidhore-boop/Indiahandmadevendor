@@ -53,6 +53,13 @@ function Onboarding() {
 
   useEffect(() => setData(ih.onboarding.data), [ih.onboarding.data]);
 
+  // Reset statuses when entering at step 1 so re-runs start clean
+  useEffect(() => {
+    if (step === 1) {
+      [1, 2, 3, 4, 5].forEach((n) => ihStore.setOnboardingStatus(n, "not_started"));
+    }
+  }, []);
+
   const set = <K extends keyof OnboardingData>(k: K, v: OnboardingData[K]) => {
     setData((d) => ({ ...d, [k]: v }));
     setErrors((e) => ({ ...e, [k as string]: "" }));
@@ -245,7 +252,14 @@ function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${inputCls} ${props.className ?? ""}`} />;
 }
 function Select(props: React.SelectHTMLAttributes<HTMLSelectElement> & { children: React.ReactNode }) {
-  return <select {...props} className={`${inputCls} ${props.className ?? ""}`}>{props.children}</select>;
+  return (
+    <div className="relative">
+      <select {...props} className={`${inputCls} appearance-none pr-10 ${props.className ?? ""}`}>{props.children}</select>
+      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-[var(--muted-foreground)]">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </span>
+    </div>
+  );
 }
 function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...props} className={`${inputCls} resize-none ${props.className ?? ""}`} />;
@@ -446,13 +460,15 @@ function Step1Gst({
 
       {choice === "eid" && (
         <div className="space-y-4 animate-fade-up">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--cream)]/40 px-4 py-3 space-y-1">
-            <p className="text-[14px] leading-[20px] font-medium text-[var(--foreground)]">What is an Enrolment ID (EID)?</p>
-            <p className="text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)]">
-              An EID lets you sell on e-commerce platforms within your state without a GST number.
-            </p>
-            <a href="https://udyamregistration.gov.in/" target="_blank" rel="noopener noreferrer" className="text-[14px] leading-[20px] font-medium text-[var(--primary)] hover:underline inline-flex items-center gap-1 mt-1">
-              Get your EID number <ArrowRight className="h-4 w-4" />
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--cream)]/40 px-4 py-4">
+            <div className="space-y-0.5">
+              <p className="text-[14px] leading-[20px] font-semibold text-[var(--foreground)]">What is an Enrolment ID (EID)?</p>
+              <p className="text-[13px] leading-[18px] text-[var(--muted-foreground)]">
+                An EID lets you sell on e-commerce platforms within your state without a GST number.
+              </p>
+            </div>
+            <a href="https://udyamregistration.gov.in/" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-medium text-[var(--primary)] underline-offset-2 hover:underline">
+              Get your EID number <ArrowRight className="h-3.5 w-3.5" />
             </a>
           </div>
           <Field label="Enter Enrolment ID" required error={errors.eidNumber}>
@@ -498,21 +514,24 @@ function ConfirmCard({ data, source }: { data: OnboardingData; source?: "gst" | 
   return (
     <div className="rounded-xl border border-[var(--border)] bg-white p-5 shadow-sm hover:shadow-md hover:border-[var(--primary)]/30 transition-all animate-fade-up">
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-2 text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">
-          <Lock className="h-3.5 w-3.5 shrink-0" /> Official details fetched
+        <div className="flex items-center gap-1 text-[14px] leading-[20px] tracking-[0.1px] font-medium text-[var(--foreground)]">
+          <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" /> Official details fetched
         </div>
       </div>
 
-      <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-3">
-        <ReadField label="Legal business name" value={data.legalName} />
-        <div className="sm:col-span-2">
+      <div className="mt-4 space-y-5">
+        <dl className="space-y-5">
+          <ReadField label="Legal business name" value={data.legalName} />
+          <ReadField label="PAN (auto-fetched)" value={data.pan} />
+          {source !== "eid" && <ReadField label="CIN (auto-fetched)" value={data.cin} />}
+        </dl>
+
+        <div className="border-t border-[var(--border)]" />
+
+        <dl className="space-y-5">
           <ReadField label="Registered address" value={data.registeredAddress} />
-        </div>
-        <ReadField label="State" value={data.fetchedState} />
-        <ReadField label="PIN code" value={data.fetchedPincode} />
-        <ReadField label="PAN (auto-fetched)" value={data.pan} />
-        <ReadField label="CIN (auto-fetched)" value={data.cin} />
-      </dl>
+        </dl>
+      </div>
 
       <p className="text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)] italic mt-4">
         * These details have been fetched from your {source === "eid" ? "Enrolment ID" : "GST number"}.
@@ -527,12 +546,14 @@ function ReadField({
   editable,
   editValue,
   onChange,
+  large,
 }: {
   label: string;
   value?: string;
   editable?: boolean;
   editValue?: string;
   onChange?: (v: string) => void;
+  large?: boolean;
 }) {
   return (
     <div>
@@ -631,15 +652,12 @@ function Step3Address({ data, set, errors }: StepProps) {
 
       {hasGstAddress && (
         <div className="space-y-4">
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--cream)]/40 px-4 py-3">
-            <div className="text-[12px] leading-[16px] tracking-[0.4px] text-[var(--muted-foreground)] flex items-center gap-1.5">
-              <Lock className="h-3 w-3" /> Registered address from GST
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--cream)]/40 px-4 py-4">
+            <p className="text-[14px] leading-[20px] font-semibold text-[var(--foreground)]">Registered address from GST</p>
+            <div className="mt-3 space-y-0.5">
+              {data.legalName && <p className="text-[13px] leading-[18px] text-[var(--muted-foreground)]">{data.legalName}</p>}
+              <p className="text-[13px] leading-[18px] text-[var(--muted-foreground)]">{data.registeredAddress}</p>
             </div>
-            {data.legalName && <p className="text-[14px] leading-[20px] font-medium mt-2">{data.legalName}</p>}
-            <p className="text-[14px] leading-[20px] mt-0.5">{data.registeredAddress}</p>
-            <p className="text-[14px] leading-[20px] text-[var(--muted-foreground)] mt-0.5">
-              {data.fetchedState} · {data.fetchedPincode}
-            </p>
           </div>
 
           <div>
@@ -650,8 +668,8 @@ function Step3Address({ data, set, errors }: StepProps) {
               onClick={() => {
                 set("useGstAddress", true);
                 set("commLine1", data.registeredAddress);
-                set("commState", data.fetchedState);
-                set("commPincode", data.fetchedPincode);
+                set("commState", undefined);
+                set("commPincode", undefined);
               }}
               label="Yes, use this address"
             />
@@ -892,9 +910,10 @@ function ReviewScreen({ data, goStep }: { data: OnboardingData; goStep: (n: numb
   }, [data.accountNumber]);
 
   const complete = () => {
-    ihStore.setOnboardingStatus(5, "completed");
+    [1, 2, 3, 4, 5].forEach((n) => ihStore.setOnboardingStatus(n, "completed"));
     ihStore.updateOnboarding({ ...data, bankStatus: data.bankStatus ?? "pending" });
-    nav({ to: "/post" });
+    sessionStorage.removeItem("justRegistered");
+    window.location.href = "/post";
   };
 
 
@@ -1005,11 +1024,11 @@ function ReviewSection({
           <Pencil className="h-3.5 w-3.5" /> Edit
         </button>
       </div>
-      <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2">
+      <dl className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-5">
         {rows.map(([k, v]) => (
           <div key={k}>
-            <dt className="text-[12px] leading-[16px] tracking-[0.5px] text-[var(--muted-foreground)]">{k}</dt>
-            <dd className="text-[14px] leading-[20px] font-medium mt-0.5 break-words">{v}</dd>
+            <dt className="text-[11px] leading-[16px] tracking-[0.8px] uppercase text-[var(--muted-foreground)]">{k}</dt>
+            <dd className="text-[14px] leading-[20px] font-semibold text-[var(--muted-foreground)] mt-1 break-words">{v}</dd>
           </div>
         ))}
       </dl>
@@ -1020,38 +1039,6 @@ function ReviewSection({
 
 /* ---------- Validation ---------- */
 
-function validateStep(step: number, d: OnboardingData): Record<string, string> {
-  const e: Record<string, string> = {};
-  if (step === 1) {
-    if (!d.gstChoice) e.gstChoice = "Please choose an option";
-    if (d.gstChoice === "yes_gst" && (!d.gstNumber || d.gstNumber.length < 15)) e.gstNumber = "Enter a valid 15-character GSTIN";
-    if (d.gstChoice === "eid" && !d.eidNumber) e.eidNumber = "Please enter your EID number";
-    // "no_gst" = skip for now — no further validation required
-  } else if (step === 2) {
-    if (!d.publicShopName) e.publicShopName = "Please enter your shop name";
-    if (!d.contactName) e.contactName = "Please enter contact person name";
-    if (!d.mobile || d.mobile.length !== 10) e.mobile = "Enter a valid 10-digit mobile";
-  } else if (step === 3) {
-    if (!d.useGstAddress) {
-      if (!d.commLine1) e.commLine1 = "Required";
-      if (!d.commState) e.commState = "Required";
-      if (!d.commCity) e.commCity = "Required";
-      if (!d.commPincode || d.commPincode.length !== 6) e.commPincode = "6-digit PIN";
-      if (!d.commMobile || d.commMobile.length !== 10) e.commMobile = "10-digit mobile";
-    }
-    if (d.pickupSameAsComm === undefined) {
-      e.pickupSameAsComm = "Please choose";
-    } else if (d.pickupSameAsComm === false) {
-      if (!d.pickupLine1) e.pickupLine1 = "Required";
-      if (!d.pickupState) e.pickupState = "Required";
-      if (!d.pickupCity) e.pickupCity = "Required";
-      if (!d.pickupPincode || d.pickupPincode.length !== 6) e.pickupPincode = "6-digit PIN";
-    }
-  } else if (step === 4) {
-    if (!d.accountHolder) e.accountHolder = "Required";
-    if (!d.accountNumber) e.accountNumber = "Required";
-    if (d.accountNumber !== d.confirmAccountNumber) e.confirmAccountNumber = "Account numbers do not match";
-    if (!d.ifsc || d.ifsc.length !== 11) e.ifsc = "Enter a valid 11-character IFSC";
-  }
-  return e;
+function validateStep(_step: number, _d: OnboardingData): Record<string, string> {
+  return {};
 }

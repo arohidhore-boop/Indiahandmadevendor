@@ -1,5 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { AuthShell } from "@/components/ih/AuthShell";
 import { ihStore } from "@/lib/ih-store";
 
@@ -9,16 +10,12 @@ export const Route = createFileRoute("/details")({
 });
 
 function Details() {
-  const nav = useNavigate();
   const [f, setF] = useState({ name: "Neha Kumar", shopName: "Samba Sakhi Crafts", city: "Jaipur", state: "Rajasthan", primaryCraft: "Handicraft" });
   return (
     <AuthShell step={4} totalSteps={4}>
       <div className="surface-card p-8">
         <h1 className="font-serif text-[28px] leading-[32px] font-medium">Tell us about your business</h1>
-        <form
-          onSubmit={(e) => { e.preventDefault(); ihStore.setSeller({ ...f, initials: f.name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase() || "S" }); sessionStorage.setItem("justRegistered", "1"); nav({ to: "/post" }); }}
-          className="mt-6 space-y-4"
-        >
+        <div className="mt-6 space-y-4">
           <In label="Your name" v={f.name} on={(v)=>setF({...f, name:v})} ph="Neha Kumar" />
           <In label="Shop name" v={f.shopName} on={(v)=>setF({...f, shopName:v})} ph="Samba Sakhi Crafts" />
           <div className="grid grid-cols-2 gap-3">
@@ -42,10 +39,15 @@ function Details() {
               {["Handloom","Handicraft","Both"].map(c=>(<option key={c}>{c}</option>))}
             </select>
           </label>
-          <button className="ih-btn ih-btn-primary ih-btn-full">
-            Continue
+          <button type="button" onClick={() => {
+            ihStore.setSeller({ ...f, initials: f.name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase() || "S" });
+            ihStore.resetOnboarding();
+            sessionStorage.setItem("justRegistered", "1");
+            window.location.href = "/post";
+          }} className="ih-btn ih-btn-primary ih-btn-full">
+            Continue <ArrowRight className="h-4 w-4" />
           </button>
-        </form>
+        </div>
       </div>
     </AuthShell>
   );

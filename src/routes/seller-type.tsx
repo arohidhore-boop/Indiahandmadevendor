@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, User, Users, Building2, Briefcase, Landmark, ScrollText } from "lucide-react";
 import { AuthShell } from "@/components/ih/AuthShell";
@@ -19,7 +19,6 @@ const options = [
 ];
 
 function SellerType() {
-  const nav = useNavigate();
   const [sel, setSel] = useState("");
   return (
     <AuthShell step={3} totalSteps={5}>
@@ -55,7 +54,7 @@ function SellerType() {
         </div>
         <button
           
-          onClick={() => { ihStore.setSeller({ sellerType: sel }); nav({ to: "/details" }); }}
+          onClick={() => { ihStore.setSeller({ sellerType: sel }); window.location.href = "/details"; }}
           className="ih-btn ih-btn-primary ih-btn-full mt-6"
         >
           Continue

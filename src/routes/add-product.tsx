@@ -1,6 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { createPortal } from "react-dom";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useRef, useState } from "react";
 import {
   ImagePlus, CheckCircle2, XCircle, Info, Package2, Sparkles, Check, ArrowLeft,
 } from "lucide-react";
@@ -85,7 +84,6 @@ const initial: FormState = {
 };
 
 function AddProduct() {
-  const nav = useNavigate();
   const [step, setStep] = useState(0);
   const [showCongrats, setShowCongrats] = useState(false);
   const [f, setF] = useState<FormState>(initial);
@@ -112,7 +110,7 @@ function AddProduct() {
   };
   const back = () => {
     if (step > 0) setStep(step - 1);
-    else nav({ to: "/post" });
+    else window.location.href = "/post";
   };
 
   const publish = () => {
@@ -130,7 +128,7 @@ function AddProduct() {
 
   const goToShop = () => {
     try { sessionStorage.setItem("justAddedProduct", "1"); } catch {}
-    nav({ to: "/post" });
+    window.location.href = "/post";
   };
 
   return (
@@ -165,11 +163,6 @@ function AddProduct() {
 
       {showCongrats && <CongratsModal onContinue={goToShop} />}
 
-      <style>{`
-        .ih-i{width:100%;padding:.7rem .9rem;border-radius:8px;border:1px solid var(--border);background:#fff;outline:none;font-size:0.875rem;color:var(--foreground)}select.ih-i{padding-right:3rem;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
-        .ih-i:focus{border-color:var(--primary)}
-        .ih-i::placeholder{color:#9aa0a6}
-      `}</style>
     </AppShell>
   );
 }
@@ -446,8 +439,7 @@ function VariantTags({ label, hint, values, onChange, suggestions, showSwatch = 
   label: string; hint: string; suggestions?: string[]; showSwatch?: boolean;
   values: VariantItem[]; onChange: (v: VariantItem[]) => void;
 }) {
-  const [input, setInput] = useState("");
-  const [adding, setAdding] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const labels = values.map((v) => v.label);
 
   const COLOR_MAP: Record<string, string> = {
@@ -466,12 +458,16 @@ function VariantTags({ label, hint, values, onChange, suggestions, showSwatch = 
 
   const colorFor = (name: string) => COLOR_MAP[name.toLowerCase().trim()] ?? "#888888";
 
-  const add = (val: string) => {
+  const addFromRef = () => {
+    const trimmed = (inputRef.current?.value ?? "").trim();
+    if (trimmed && !labels.includes(trimmed))
+      onChange([...values, { label: trimmed, qty: "", swatchType: "color", color: colorFor(trimmed) }]);
+    if (inputRef.current) inputRef.current.value = "";
+  };
+  const addDirect = (val: string) => {
     const trimmed = val.trim();
     if (trimmed && !labels.includes(trimmed))
       onChange([...values, { label: trimmed, qty: "", swatchType: "color", color: colorFor(trimmed) }]);
-    setInput("");
-    setAdding(false);
   };
   const patch = (lbl: string, p: Partial<VariantItem>) =>
     onChange(values.map((v) => v.label === lbl ? { ...v, ...p } : v));
@@ -522,49 +518,30 @@ function VariantTags({ label, hint, values, onChange, suggestions, showSwatch = 
       {suggestions ? (
         <div className="mt-4 flex flex-wrap gap-1.5">
           {suggestions.map((s) => (
-            <button key={s} type="button" onClick={() => add(s)}
+            <button key={s} type="button" onClick={() => addDirect(s)}
               className={`h-8 px-3 rounded-full border text-[12px] font-medium transition ${labels.includes(s) ? "border-[var(--primary)] bg-[var(--primary)] text-white" : "border-[var(--border)] bg-white hover:bg-[var(--cream)] text-[var(--foreground)]"}`}>
               {labels.includes(s) ? "✓ " : "+ "}{s}
             </button>
           ))}
           <div className="flex gap-1.5">
-            <input className="h-8 px-3 rounded-full border border-dashed border-[var(--border)] text-[12px] w-32 outline-none focus:border-[var(--primary)] bg-white"
-              value={input} onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(input); } }}
+            <input ref={inputRef}
+              className="h-8 px-3 rounded-full border border-dashed border-[var(--border)] text-[12px] w-32 outline-none focus:border-[var(--primary)] bg-white"
               placeholder="Other…" />
-            {input.trim() && (
-              <button type="button" onClick={() => add(input)}
-                className="h-8 px-3 rounded-full border border-[var(--primary)] bg-[var(--primary)] text-white text-[12px] font-medium">
-                Add
-              </button>
-            )}
+            <button type="button" onClick={addFromRef}
+              className="h-8 px-3 rounded-full border border-[var(--primary)] bg-[var(--primary)] text-white text-[12px] font-medium">
+              Add
+            </button>
           </div>
         </div>
       ) : (
-        <div className="mt-3">
-          {adding ? (
-            <div className="flex gap-2 items-center">
-              <input
-                autoFocus
-                className="h-9 px-3 rounded-lg border border-[var(--primary)] text-[14px] leading-[20px] outline-none bg-white w-44"
-                value={input} onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(input); } if (e.key === "Escape") { setAdding(false); setInput(""); } }}
-                placeholder="e.g. Red" />
-              <button type="button" onClick={() => add(input)}
-                className="h-9 px-4 rounded-lg bg-[var(--primary)] text-white text-[14px] font-medium">
-                Add
-              </button>
-              <button type="button" onClick={() => { setAdding(false); setInput(""); }}
-                className="h-9 px-3 rounded-lg border border-[var(--border)] text-[14px] text-[var(--muted-foreground)]">
-                Cancel
-              </button>
-            </div>
-          ) : (
-            <button type="button" onClick={() => setAdding(true)}
-              className="h-9 px-4 rounded-lg border border-dashed border-[var(--border)] text-[14px] text-[var(--muted-foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition flex items-center gap-1.5">
-              <span className="text-lg leading-none">+</span> Add colour variant
-            </button>
-          )}
+        <div className="mt-3 flex gap-2 items-center">
+          <input ref={inputRef}
+            className="h-9 px-3 rounded-lg border border-[var(--border)] focus:border-[var(--primary)] text-[14px] leading-[20px] outline-none bg-white w-44"
+            placeholder="e.g. Red" />
+          <button type="button" onClick={addFromRef}
+            className="h-9 px-4 rounded-lg bg-[var(--primary)] text-white text-[14px] font-medium">
+            Add
+          </button>
         </div>
       )}
     </div>
@@ -796,7 +773,7 @@ function Review({ f, onEdit, steps }: { f: FormState; onEdit: (n: number) => voi
       </div>
       <ReviewSection title="Basic details" onEdit={() => onEdit(idx("Basic Info"))} items={[
         ["Category", f.category || "—"], ["Subcategory", f.subcategory || "—"], ["Craft", f.craft || "—"],
-        ["Kind", f.kind ? KINDS.find((k) => k.id === f.kind)!.title : "—"],
+        ["Kind", f.kind ? (KINDS.find((k) => k.id === f.kind)?.title ?? "—") : "—"],
       ]} />
       <ReviewSection title="Photos" onEdit={() => onEdit(idx("Photos"))} items={[["Photos uploaded", `${f.images.length} photo${f.images.length === 1 ? "" : "s"}`]]} />
       <ReviewSection title="About the craft" onEdit={() => onEdit(idx("Craft"))} items={[["Material", f.material || "—"], ["Location", f.origin || "—"], ["Time to make", f.timeToMake || "—"]]} />
@@ -824,8 +801,7 @@ function ReviewSection({ title, items, onEdit }: { title: string; items: [string
 }
 
 function CongratsModal({ onContinue }: { onContinue: () => void }) {
-  if (typeof document === "undefined") return null;
-  return createPortal(
+  return (
     <div className="fixed inset-0 z-[100] grid place-items-center bg-black/50 backdrop-blur-sm px-6 animate-in fade-in duration-200">
       <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-200">
         <div className="mx-auto h-16 w-16 rounded-2xl bg-[var(--primary)] text-white grid place-items-center">
@@ -836,10 +812,9 @@ function CongratsModal({ onContinue }: { onContinue: () => void }) {
           You've added your first product. Your shop is now live on India Handmade.
         </p>
         <div className="mt-6">
-          <button onClick={onContinue} className="ih-btn ih-btn-primary ih-btn-full">Continue to your shop</button>
+          <button type="button" onClick={onContinue} className="ih-btn ih-btn-primary ih-btn-full">Continue to your shop</button>
         </div>
       </div>
-    </div>,
-    document.body,
+    </div>
   );
 }

@@ -9,7 +9,6 @@ export const Route = createFileRoute("/signup")({
 });
 
 function Signup() {
-  const nav = useNavigate();
   const [show, setShow] = useState(false);
   return (
     <AuthShell step={1} totalSteps={5}>
@@ -21,7 +20,7 @@ function Signup() {
 
         <div className="mt-6 space-y-2.5">
           <SocialButton
-            onClick={() => nav({ to: "/post" })}
+            onClick={() => { window.location.href = "/verify"; }}
             label="Continue with Google"
             icon={
               <svg className="h-4 w-4" viewBox="0 0 48 48" aria-hidden>
@@ -33,7 +32,7 @@ function Signup() {
             }
           />
           <SocialButton
-            onClick={() => nav({ to: "/post" })}
+            onClick={() => { window.location.href = "/verify"; }}
             label="Continue with Facebook"
             icon={
               <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden>
@@ -42,7 +41,7 @@ function Signup() {
             }
           />
           <SocialButton
-            onClick={() => nav({ to: "/post" })}
+            onClick={() => { window.location.href = "/verify"; }}
             label="Continue with Apple"
             icon={
               <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden fill="currentColor">
@@ -61,7 +60,7 @@ function Signup() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            nav({ to: "/post" });
+            window.location.href = "/verify";
           }}
           className="space-y-4"
           noValidate
@@ -80,7 +79,7 @@ function Signup() {
           <Field label="Confirm password">
             <input type={show ? "text" : "password"}  className="ih-input" defaultValue="demo1234" />
           </Field>
-          <button type="button" onClick={() => nav({ to: "/post" })} className="ih-btn ih-btn-primary ih-btn-full">
+          <button type="submit" className="ih-btn ih-btn-primary ih-btn-full">
             Continue
           </button>
         </form>

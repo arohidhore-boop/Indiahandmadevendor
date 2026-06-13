@@ -1,6 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AuthShell } from "@/components/ih/AuthShell";
 import { ihStore } from "@/lib/ih-store";
 
@@ -10,14 +10,13 @@ export const Route = createFileRoute("/gst")({
 });
 
 function Gst() {
-  const nav = useNavigate();
   const [hasGst, setHasGst] = useState<"yes" | "no" | null>(null);
   const [gst, setGst] = useState("");
   const [eid, setEid] = useState("");
 
   const goHome = () => {
     sessionStorage.setItem("justRegistered", "1");
-    nav({ to: "/post" });
+    window.location.href = "/post";
   };
 
   const onContinue = () => {
@@ -73,14 +72,14 @@ function Gst() {
 
         <div className="mt-8 flex items-center justify-between">
           <button
-            onClick={() => nav({ to: "/details" })}
+            onClick={() => { window.location.href = "/details"; }}
             className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1.5"
           >
             <ArrowLeft className="h-4 w-4" />
             Back
           </button>
           <button onClick={onContinue} className="ih-btn ih-btn-primary">
-            Continue
+            Continue <ArrowRight className="h-4 w-4" />
           </button>
         </div>
 
