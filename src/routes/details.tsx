@@ -10,7 +10,7 @@ export const Route = createFileRoute("/details")({
 });
 
 function Details() {
-  const [f, setF] = useState({ name: "Neha Kumar", shopName: "Samba Sakhi Crafts", city: "Jaipur", state: "Rajasthan", primaryCraft: "Handicraft" });
+  const [f, setF] = useState({ name: "Neha Kumar", shopName: "Samba Sakhi Crafts", city: "Jaipur", state: "Rajasthan", primaryCraft: "Handicraft", mobile: "9876543210" });
   return (
     <AuthShell step={4} totalSteps={4}>
       <div className="surface-card p-8">
@@ -18,6 +18,14 @@ function Details() {
         <div className="mt-6 space-y-4">
           <In label="Your name" v={f.name} on={(v)=>setF({...f, name:v})} ph="Neha Kumar" />
           <In label="Shop name" v={f.shopName} on={(v)=>setF({...f, shopName:v})} ph="Samba Sakhi Crafts" />
+          <label className="block">
+            <span className="text-[14px] leading-[20px] tracking-[0.1px] font-medium text-[var(--foreground)]">Phone number</span>
+            <div className="mt-1.5 flex items-center rounded-[10px] border border-[var(--border)] bg-white focus-within:border-[var(--primary)] overflow-hidden">
+              <span className="px-3 text-[14px] text-[var(--muted-foreground)] border-r border-[var(--border)] py-3 bg-white select-none">+91</span>
+              <input type="tel" value={f.mobile} onChange={(e)=>setF({...f, mobile:e.target.value})} placeholder="10-digit mobile number"
+                className="flex-1 px-4 py-3 outline-none bg-white text-[14px]" />
+            </div>
+          </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="block">
               <span className="text-[14px] leading-[20px] tracking-[0.1px] font-medium text-[var(--foreground)]">State</span>
@@ -53,11 +61,11 @@ function Details() {
   );
 }
 
-function In({ label, v, on, ph }: { label: string; v: string; on: (v: string)=>void; ph?: string }) {
+function In({ label, v, on, ph, type = "text" }: { label: string; v: string; on: (v: string)=>void; ph?: string; type?: string }) {
   return (
     <label className="block">
       <span className="text-[14px] leading-[20px] tracking-[0.1px] font-medium text-[var(--foreground)]">{label}</span>
-      <input value={v} onChange={(e)=>on(e.target.value)} placeholder={ph}
+      <input type={type} value={v} onChange={(e)=>on(e.target.value)} placeholder={ph}
         className="mt-1.5 w-full px-4 py-3 rounded-[10px] border border-[var(--border)] bg-white outline-none focus:border-[var(--primary)]" />
     </label>
   );

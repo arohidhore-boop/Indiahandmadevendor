@@ -27,7 +27,7 @@ export const Route = createFileRoute("/post")({
 });
 
 const PROFILE_STEPS: { n: number; label: string; desc: string; icon: typeof Check }[] = [
-  { n: 1, label: "GST / registration details", desc: "Add GST, EID, or skip for now", icon: Landmark },
+  { n: 1, label: "GST / registration details", desc: "Add your GST number or artisan EID", icon: Landmark },
   { n: 2, label: "Shop profile", desc: "Public name, contact and craft", icon: Store },
   { n: 3, label: "Address", desc: "Communication, pickup and return", icon: MapPin },
   { n: 4, label: "Payment setup", desc: "Bank account for payouts", icon: Building2 },

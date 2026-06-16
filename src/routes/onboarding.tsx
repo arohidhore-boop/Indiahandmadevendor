@@ -574,6 +574,22 @@ function ReadField({
 /* ---------- Step 2 — Shop profile ---------- */
 
 function Step2Shop({ data, set, errors }: StepProps) {
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [verified, setVerified] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [otpError, setOtpError] = useState("");
+
+  const sendOtp = () => {
+    setSending(true);
+    setTimeout(() => { setSending(false); setOtpSent(true); setOtp(""); setOtpError(""); }, 900);
+  };
+
+  const verifyOtp = () => {
+    if (otp === "123456") { setVerified(true); setOtpError(""); }
+    else setOtpError("Incorrect OTP. Please try again.");
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -585,12 +601,7 @@ function Step2Shop({ data, set, errors }: StepProps) {
 
       <div className="grid sm:grid-cols-2 gap-5">
         <div className="sm:col-span-2">
-          <Field
-            label="Public shop name"
-            required
-
-            error={errors.publicShopName}
-          >
+          <Field label="Public shop name" required error={errors.publicShopName}>
             <TextInput
               value={data.publicShopName ?? ""}
               onChange={(e) => set("publicShopName", e.target.value)}
@@ -598,7 +609,6 @@ function Step2Shop({ data, set, errors }: StepProps) {
             />
           </Field>
         </div>
-
 
         <Field label="Contact person name" required error={errors.contactName}>
           <TextInput
@@ -608,15 +618,60 @@ function Step2Shop({ data, set, errors }: StepProps) {
           />
         </Field>
 
-        <Field label="Mobile number" required error={errors.mobile}>
-          <TextInput
-            inputMode="numeric"
-            maxLength={10}
-            value={data.mobile ?? ""}
-            onChange={(e) => set("mobile", e.target.value.replace(/\D/g, ""))}
-            placeholder="10-digit mobile"
-          />
-        </Field>
+        <div>
+          <Field label="Mobile number" required error={errors.mobile}>
+            <div className="flex gap-2">
+              <div className="flex flex-1 rounded-xl border border-[var(--border)] bg-white focus-within:border-[var(--primary)] overflow-hidden transition">
+                <span className="px-3 py-3 text-[14px] text-[var(--muted-foreground)] border-r border-[var(--border)] bg-white select-none">+91</span>
+                <input
+                  inputMode="numeric" maxLength={10}
+                  value={data.mobile ?? ""}
+                  onChange={(e) => { set("mobile", e.target.value.replace(/\D/g, "")); setVerified(false); setOtpSent(false); }}
+                  placeholder="10-digit mobile"
+                  className="flex-1 px-3 py-3 outline-none text-[14px] bg-white"
+                  disabled={verified}
+                />
+              </div>
+              {verified ? (
+                <span className="flex items-center gap-1 px-3 text-[13px] font-medium text-[var(--success)] whitespace-nowrap">
+                  <ShieldCheck className="h-4 w-4" /> Verified
+                </span>
+              ) : (
+                <button type="button" onClick={sendOtp}
+                  disabled={!data.mobile || data.mobile.length < 10 || sending}
+                  className="ih-btn ih-btn-outline shrink-0 text-[13px] px-3">
+                  {sending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+                  {sending ? "Sending…" : otpSent ? "Resend OTP" : "Send OTP"}
+                </button>
+              )}
+            </div>
+          </Field>
+
+          {otpSent && !verified && (
+            <div className="mt-3 animate-fade-up">
+              <p className="text-[13px] text-[var(--muted-foreground)] mb-2">
+                OTP sent to +91 {data.mobile}. Enter it below. <span className="text-[var(--muted-foreground)]/60">(Demo: 123456)</span>
+              </p>
+              <div className="flex gap-2">
+                <TextInput
+                  inputMode="numeric" maxLength={6} value={otp}
+                  onChange={(e) => { setOtp(e.target.value.replace(/\D/g, "")); setOtpError(""); }}
+                  placeholder="6-digit OTP"
+                  className="max-w-[160px] tracking-widest"
+                />
+                <button type="button" onClick={verifyOtp} disabled={otp.length < 6}
+                  className="ih-btn ih-btn-primary text-[13px] px-4">
+                  Verify
+                </button>
+              </div>
+              {otpError && (
+                <p className="text-[13px] text-[var(--destructive)] mt-1.5 flex items-center gap-1">
+                  <AlertCircle className="h-3.5 w-3.5" /> {otpError}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="sm:col-span-2">
           <Field label="Shop description (optional)">
@@ -628,9 +683,7 @@ function Step2Shop({ data, set, errors }: StepProps) {
             />
           </Field>
         </div>
-
       </div>
-
     </div>
   );
 }
