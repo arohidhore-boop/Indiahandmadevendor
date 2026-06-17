@@ -105,7 +105,7 @@ function AddProduct() {
   };
 
   const steps = useMemo(() => {
-    const base = ["Photos", "Basic Info", "Craft", "Variants", "Pricing", "Review"];
+    const base = ["Photos", "Basic Info", "Variants", "Craft", "Pricing", "Review"];
     return f.kind === "ooak" ? base.filter((s) => s !== "Variants") : base;
   }, [f.kind]);
   const current = steps[step];
@@ -228,7 +228,7 @@ function Field({ label, hint, children }: { label: string; hint?: React.ReactNod
 }
 
 const SUBCATEGORIES: Record<string, string[]> = {
-  "Clothing / Apparel": ["Saree", "Kurta", "Dupatta", "Shawl", "Stole", "Lehenga", "Sherwani"],
+  "Clothing / Apparel": ["Saree", "Kurta", "Dupatta", "Shawl", "Stole", "Lehenga", "Sherwani", "Kids Socks", "Womans Socks", "Mens Socks"],
   "Jewelry / Accessories": ["Necklace", "Earrings", "Bangles", "Rings", "Anklets", "Hairpin"],
   "Home Decor": ["Wall Art", "Sculpture", "Lamps", "Cushion Cover", "Rugs", "Vases"],
   "Kitchen / Dining": ["Cookware", "Serveware", "Cutlery", "Storage Jars", "Table Linen"],
