@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
 import {
-  ImagePlus, CheckCircle2, XCircle, Info, Package2, Sparkles, Check, ArrowLeft,
+  ImagePlus, CheckCircle2, XCircle, Info, Package2, Sparkles, Check, ArrowLeft, ArrowRight, Loader2, Search, X,
 } from "lucide-react";
 import { AppShell } from "@/components/ih/AppShell";
 import { ihStore } from "@/lib/ih-store";
@@ -51,11 +51,11 @@ type FormState = {
 };
 
 const initial: FormState = {
-  category: "Handloom",
-  subcategory: "Banarasi",
-  craft: "Banarasi Silk Weaving",
-  name: "Hand-woven Banarasi Silk Dupatta",
-  description: "Handcrafted using traditional pit-loom technique by master weavers in Varanasi. Features intricate zari work with floral motifs. Each piece takes 3–5 days to weave.",
+  category: "",
+  subcategory: "",
+  craft: "",
+  name: "",
+  description: "",
   kind: "single",
   images: [],
   material: "",
@@ -89,8 +89,23 @@ function AddProduct() {
   const [f, setF] = useState<FormState>(initial);
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) => setF((p) => ({ ...p, [k]: v }));
 
+  const [aiDetecting, setAiDetecting] = useState(false);
+  const [aiDetected, setAiDetected] = useState(false);
+  const [detectedType, setDetectedType] = useState("");
+  const [suggestedSubs, setSuggestedSubs] = useState<string[]>([]);
+
+  const runAiDetect = () => {
+    setAiDetecting(true);
+    setTimeout(() => {
+      setDetectedType("Socks");
+      setSuggestedSubs(["Kids Socks", "Womans Socks", "Mens Socks"]);
+      setAiDetecting(false);
+      setAiDetected(true);
+    }, 1800);
+  };
+
   const steps = useMemo(() => {
-    const base = ["Basic Info", "Photos", "Craft", "Variants", "Pricing", "Review"];
+    const base = ["Photos", "Basic Info", "Craft", "Variants", "Pricing", "Review"];
     return f.kind === "ooak" ? base.filter((s) => s !== "Variants") : base;
   }, [f.kind]);
   const current = steps[step];
@@ -137,16 +152,22 @@ function AddProduct() {
         <Stepper steps={steps} current={step} />
 
         <h2 className="mt-6 text-[24px] leading-[28px] font-medium text-[var(--foreground)]">
-          {current === "Variants"
+          {current === "Photos"
+            ? "Showcase your craft"
+            : current === "Variants"
             ? f.kind === "mto" ? "Made to order"
             : f.kind === "multi" ? "Multiple pieces"
             : "Options & availability"
             : current}
         </h2>
 
-        <div className="mt-3">
-          {current === "Basic Info" && <BasicInfo f={f} update={update} />}
-          {current === "Photos" && <Photos images={f.images} onFiles={onFiles} remove={(i) => update("images", f.images.filter((_, j) => j !== i))} />}
+        {current === "Photos" && (
+          <p className="mt-1 text-[14px] text-[var(--muted-foreground)]">Upload clear photos and we'll automatically detect the category and craft for you.</p>
+        )}
+
+        <div className={current === "Photos" ? "mt-6" : "mt-3"}>
+          {current === "Basic Info" && <BasicInfo f={f} update={update} detectedType={detectedType} suggestedSubs={suggestedSubs} />}
+          {current === "Photos" && <Photos images={f.images} onFiles={onFiles} remove={(i) => { update("images", f.images.filter((_, j) => j !== i)); setAiDetected(false); }} aiDetecting={aiDetecting} aiDetected={aiDetected} onAiDetect={runAiDetect} detectedType={detectedType} suggestedSubs={suggestedSubs} />}
           {current === "Craft" && <Craft f={f} update={update} />}
           {current === "Variants" && <Variants f={f} update={update} />}
           {current === "Pricing" && <Pricing f={f} update={update} />}
@@ -156,7 +177,7 @@ function AddProduct() {
         <div className="mt-10 flex items-center justify-between pt-6 border-t border-[var(--border)]">
           <button onClick={back} className="ih-btn ih-btn-outline">Back</button>
           <button onClick={next} className="ih-btn ih-btn-primary">
-            {step === steps.length - 1 ? "Publish Product" : "Continue"}
+            {step === steps.length - 1 ? "Publish Product" : <><span>Continue</span><ArrowRight className="h-4 w-4" /></>}
           </button>
         </div>
       </div>
@@ -215,34 +236,137 @@ const SUBCATEGORIES: Record<string, string[]> = {
   "Toys": ["Wooden Toys", "Cloth Dolls", "Channapatna", "Educational"],
   "Religious / Ritual Items": ["Idols", "Diyas", "Pooja Thali", "Incense Holder", "Bells"],
 };
+
+const SUBCATEGORY_TO_CATEGORY: Record<string, string> = {};
+Object.entries(SUBCATEGORIES).forEach(([cat, subs]) => {
+  subs.forEach(sub => {
+    SUBCATEGORY_TO_CATEGORY[sub] = cat;
+  });
+});
 const KINDS: { id: Kind; title: string; desc: string }[] = [
   { id: "ooak", title: "One of a kind", desc: "This is the only piece" },
   { id: "multi", title: "Multiple pieces", desc: "You have more than one" },
   { id: "mto", title: "Made to order", desc: "Made when someone orders" },
 ];
 
-function BasicInfo({ f, update }: { f: FormState; update: <K extends keyof FormState>(k: K, v: FormState[K]) => void }) {
-  const subOptions = SUBCATEGORIES[f.category] ?? [];
+function CategorySearch({ selected, onSelect, detectedType, suggestedSubs }: {
+  selected: { category: string; subcategory: string };
+  onSelect: (category: string, subcategory: string) => void;
+  detectedType?: string;
+  suggestedSubs?: string[];
+}) {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const allSubcats = Object.entries(SUBCATEGORIES).flatMap(([cat, subs]) =>
+    subs.map(sub => ({ sub, cat }))
+  );
+
+  const results = query.trim()
+    ? allSubcats.filter(({ sub }) => sub.toLowerCase().includes(query.toLowerCase()))
+    : [];
+
+  const handleSelect = (subcategory: string) => {
+    const category = SUBCATEGORY_TO_CATEGORY[subcategory];
+    onSelect(category, subcategory);
+    setQuery("");
+    setOpen(false);
+  };
+
+  return (
+    <Field label={!selected.category ? "Product category & type" : undefined}>
+      {selected.category && selected.subcategory ? (
+        <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--cream)]/30">
+          <div className="flex-1">
+            <div className="text-[13px] text-[var(--muted-foreground)]">{selected.category}</div>
+            <div className="text-[14px] font-medium text-[var(--foreground)]">{selected.subcategory}</div>
+          </div>
+          <button onClick={() => { onSelect("", ""); setQuery(""); }} className="p-1 hover:bg-white/50 rounded-lg transition">
+            <X className="h-4 w-4 text-[var(--muted-foreground)]" />
+          </button>
+        </div>
+      ) : detectedType && suggestedSubs && suggestedSubs.length > 0 ? (
+        <div className="space-y-4">
+          <div>
+            <div className="text-[13px] font-medium text-[var(--foreground)] mb-3">Detected: <span className="font-bold">{detectedType}</span></div>
+            <div className="border border-[var(--border)] rounded-lg overflow-hidden bg-white">
+              {suggestedSubs.map((sub, idx) => (
+                <div key={sub} className={`flex items-center justify-between p-4 ${idx > 0 ? 'border-t border-[var(--border)]' : ''}`}>
+                  <div>
+                    <div className="text-[14px] font-semibold text-[var(--foreground)]">Product type: {sub}</div>
+                    <div className="text-[12px] text-[var(--muted-foreground)] mt-0.5">Clothing / Apparel &gt; {sub}</div>
+                  </div>
+                  <button
+                    onClick={() => handleSelect(sub)}
+                    className="px-4 py-2 rounded-lg border border-[var(--border)] bg-white text-[12px] font-medium hover:bg-[var(--cream)] transition whitespace-nowrap"
+                  >
+                    Select
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <button onClick={() => setOpen(true)} className="text-[13px] text-[var(--primary)] font-medium">Search for something else</button>
+        </div>
+      ) : (
+        <div className="relative">
+          <div className="relative">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+              onFocus={() => setOpen(true)}
+              placeholder="Search by product type (e.g. Saree, Necklace)"
+              className="ih-i w-full"
+            />
+          </div>
+          {open && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+              <div className="absolute top-full left-0 right-0 z-20 mt-1 max-h-64 overflow-y-auto rounded-xl border border-[var(--border)] bg-white shadow-lg">
+                {results.length > 0 ? (
+                  results.map(({ sub, cat }) => (
+                    <button
+                      key={sub}
+                      onClick={() => handleSelect(sub)}
+                      className="w-full text-left px-4 py-3 hover:bg-[var(--cream)] border-b border-[var(--border)]/50 last:border-b-0 transition"
+                    >
+                      <div className="text-[13px] text-[var(--muted-foreground)]">{cat}</div>
+                      <div className="text-[14px] font-medium text-[var(--foreground)]">{sub}</div>
+                    </button>
+                  ))
+                ) : query.trim() ? (
+                  <div className="px-4 py-3 text-[13px] text-[var(--muted-foreground)]">No results found</div>
+                ) : (
+                  <div className="px-4 py-3 text-[13px] text-[var(--muted-foreground)]">Start typing to search</div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </Field>
+  );
+}
+
+function BasicInfo({ f, update, detectedType, suggestedSubs }: {
+  f: FormState;
+  update: <K extends keyof FormState>(k: K, v: FormState[K]) => void;
+  detectedType: string;
+  suggestedSubs: string[];
+}) {
   return (
     <div className="space-y-5 max-w-2xl">
-      <Field label="Product category">
-        <select className="ih-i" value={f.category} onChange={(e) => { update("category", e.target.value); update("subcategory", ""); }}>
-          <option value="" disabled>Select product category</option>
-          {Object.keys(SUBCATEGORIES).map((p) => <option key={p}>{p}</option>)}
-        </select>
-      </Field>
-      <Field label="Subcategory" hint={!f.category ? "Select a product category first" : undefined}>
-        <select className="ih-i" disabled={!f.category} value={f.subcategory} onChange={(e) => update("subcategory", e.target.value)}>
-          <option value="" disabled>{f.category ? "Select subcategory" : "Select a product category first"}</option>
-          {subOptions.map((s) => <option key={s}>{s}</option>)}
-        </select>
-      </Field>
+      <CategorySearch selected={{ category: f.category, subcategory: f.subcategory }} onSelect={(cat, subcat) => { update("category", cat); update("subcategory", subcat); }} detectedType={detectedType} suggestedSubs={suggestedSubs} />
       <Field label="Craft type">
         <select className="ih-i" value={f.craft} onChange={(e) => update("craft", e.target.value)}>
           <option value="" disabled>Select craft</option>
           {["Madhubani", "Warli", "Pattachitra", "Gond Art", "Wood Carving", "Blue Pottery", "Block Print", "Phulkari", "Kalamkari", "Other"].map((c) => <option key={c}>{c}</option>)}
         </select>
       </Field>
+      {f.craft === "Other" && (
+        <input type="text" placeholder="What craft do you work with?" className="ih-i w-full" value={f.craftCustom || ""} onChange={(e) => update("craftCustom", e.target.value)} />
+      )}
       <Field label="Product name">
         <input className="ih-i" value={f.name} onChange={(e) => update("name", e.target.value)} placeholder="e.g. Handwoven Silk Saree" />
       </Field>
@@ -268,10 +392,18 @@ function BasicInfo({ f, update }: { f: FormState; update: <K extends keyof FormS
   );
 }
 
-function Photos({ images, onFiles, remove }: { images: string[]; onFiles: (f: FileList | null) => void; remove: (i: number) => void }) {
+function Photos({ images, onFiles, remove, aiDetecting, aiDetected, onAiDetect, detectedType, suggestedSubs }: {
+  images: string[];
+  onFiles: (f: FileList | null) => void;
+  remove: (i: number) => void;
+  aiDetecting: boolean;
+  aiDetected: boolean;
+  onAiDetect: () => void;
+  detectedType: string;
+  suggestedSubs: string[];
+}) {
   return (
     <div className="space-y-5 max-w-2xl">
-      <div className="text-sm text-[var(--muted-foreground)]">Upload at least 3 photos</div>
       <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
         {[0, 1, 2, 3, 4].map((i) => {
           const src = images[i];
@@ -292,6 +424,23 @@ function Photos({ images, onFiles, remove }: { images: string[]; onFiles: (f: Fi
           );
         })}
       </div>
+
+      {images.length > 0 && !aiDetected && (
+        <button onClick={onAiDetect} disabled={aiDetecting} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--primary)] text-white text-[14px] font-medium hover:opacity-90 disabled:opacity-70 transition">
+          {aiDetecting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+          {aiDetecting ? "Analysing photos…" : "Detect category with AI"}
+        </button>
+      )}
+
+      {aiDetected && (
+        <div className="rounded-xl border border-[var(--primary)]/30 bg-[var(--cream)] p-4 space-y-3">
+          <div className="flex items-center gap-2 text-[var(--primary)] font-semibold text-[14px]">
+            <Sparkles className="h-4 w-4" /> AI detected
+          </div>
+          <div className="text-[14px] font-medium text-[var(--foreground)]">{detectedType}</div>
+          <p className="text-[12px] text-[var(--muted-foreground)]">Choose the type on the next step, or search for something else.</p>
+        </div>
+      )}
 
       <div className="pt-2">
         <Label>Photo tips</Label>

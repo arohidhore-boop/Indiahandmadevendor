@@ -650,7 +650,7 @@ function Step2Shop({ data, set, errors }: StepProps) {
           {otpSent && !verified && (
             <div className="mt-3 animate-fade-up">
               <p className="text-[13px] text-[var(--muted-foreground)] mb-2">
-                OTP sent to +91 {data.mobile}. Enter it below. <span className="text-[var(--muted-foreground)]/60">(Demo: 123456)</span>
+                OTP sent to +91 {data.mobile}. Enter it below.
               </p>
               <div className="flex gap-2">
                 <TextInput
