@@ -8,215 +8,215 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as VerifyRouteImport } from './routes/verify'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SellerTypeRouteImport } from './routes/seller-type'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as ProductsRouteImport } from './routes/products'
-import { Route as PostRouteImport } from './routes/post'
-import { Route as OrdersRouteImport } from './routes/orders'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as HelpRouteImport } from './routes/help'
-import { Route as GstRouteImport } from './routes/gst'
-import { Route as GrowRouteImport } from './routes/grow'
-import { Route as EarningsRouteImport } from './routes/earnings'
-import { Route as DetailsRouteImport } from './routes/details'
-import { Route as AddProductRouteImport } from './routes/add-product'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as rootRouteImport } from "./routes/__root"
+import { Route as VerifyRouteImport } from "./routes/verify"
+import { Route as SignupRouteImport } from "./routes/signup"
+import { Route as SellerTypeRouteImport } from "./routes/seller-type"
+import { Route as ProfileRouteImport } from "./routes/profile"
+import { Route as ProductsRouteImport } from "./routes/products"
+import { Route as PostRouteImport } from "./routes/post"
+import { Route as OrdersRouteImport } from "./routes/orders"
+import { Route as OnboardingRouteImport } from "./routes/onboarding"
+import { Route as LoginRouteImport } from "./routes/login"
+import { Route as HelpRouteImport } from "./routes/help"
+import { Route as GstRouteImport } from "./routes/gst"
+import { Route as GrowRouteImport } from "./routes/grow"
+import { Route as EarningsRouteImport } from "./routes/earnings"
+import { Route as DetailsRouteImport } from "./routes/details"
+import { Route as AddProductRouteImport } from "./routes/add-product"
+import { Route as IndexRouteImport } from "./routes/index"
 
 const VerifyRoute = VerifyRouteImport.update({
-  id: '/verify',
-  path: '/verify',
+  id: "/verify",
+  path: "/verify",
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+  id: "/signup",
+  path: "/signup",
   getParentRoute: () => rootRouteImport,
 } as any)
 const SellerTypeRoute = SellerTypeRouteImport.update({
-  id: '/seller-type',
-  path: '/seller-type',
+  id: "/seller-type",
+  path: "/seller-type",
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
+  id: "/profile",
+  path: "/profile",
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
+  id: "/products",
+  path: "/products",
   getParentRoute: () => rootRouteImport,
 } as any)
 const PostRoute = PostRouteImport.update({
-  id: '/post',
-  path: '/post',
+  id: "/post",
+  path: "/post",
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersRoute = OrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
+  id: "/orders",
+  path: "/orders",
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
+  id: "/onboarding",
+  path: "/onboarding",
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
-  id: '/help',
-  path: '/help',
+  id: "/help",
+  path: "/help",
   getParentRoute: () => rootRouteImport,
 } as any)
 const GstRoute = GstRouteImport.update({
-  id: '/gst',
-  path: '/gst',
+  id: "/gst",
+  path: "/gst",
   getParentRoute: () => rootRouteImport,
 } as any)
 const GrowRoute = GrowRouteImport.update({
-  id: '/grow',
-  path: '/grow',
+  id: "/grow",
+  path: "/grow",
   getParentRoute: () => rootRouteImport,
 } as any)
 const EarningsRoute = EarningsRouteImport.update({
-  id: '/earnings',
-  path: '/earnings',
+  id: "/earnings",
+  path: "/earnings",
   getParentRoute: () => rootRouteImport,
 } as any)
 const DetailsRoute = DetailsRouteImport.update({
-  id: '/details',
-  path: '/details',
+  id: "/details",
+  path: "/details",
   getParentRoute: () => rootRouteImport,
 } as any)
 const AddProductRoute = AddProductRouteImport.update({
-  id: '/add-product',
-  path: '/add-product',
+  id: "/add-product",
+  path: "/add-product",
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/add-product': typeof AddProductRoute
-  '/details': typeof DetailsRoute
-  '/earnings': typeof EarningsRoute
-  '/grow': typeof GrowRoute
-  '/gst': typeof GstRoute
-  '/help': typeof HelpRoute
-  '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
-  '/orders': typeof OrdersRoute
-  '/post': typeof PostRoute
-  '/products': typeof ProductsRoute
-  '/profile': typeof ProfileRoute
-  '/seller-type': typeof SellerTypeRoute
-  '/signup': typeof SignupRoute
-  '/verify': typeof VerifyRoute
+  "/": typeof IndexRoute
+  "/add-product": typeof AddProductRoute
+  "/details": typeof DetailsRoute
+  "/earnings": typeof EarningsRoute
+  "/grow": typeof GrowRoute
+  "/gst": typeof GstRoute
+  "/help": typeof HelpRoute
+  "/login": typeof LoginRoute
+  "/onboarding": typeof OnboardingRoute
+  "/orders": typeof OrdersRoute
+  "/post": typeof PostRoute
+  "/products": typeof ProductsRoute
+  "/profile": typeof ProfileRoute
+  "/seller-type": typeof SellerTypeRoute
+  "/signup": typeof SignupRoute
+  "/verify": typeof VerifyRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/add-product': typeof AddProductRoute
-  '/details': typeof DetailsRoute
-  '/earnings': typeof EarningsRoute
-  '/grow': typeof GrowRoute
-  '/gst': typeof GstRoute
-  '/help': typeof HelpRoute
-  '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
-  '/orders': typeof OrdersRoute
-  '/post': typeof PostRoute
-  '/products': typeof ProductsRoute
-  '/profile': typeof ProfileRoute
-  '/seller-type': typeof SellerTypeRoute
-  '/signup': typeof SignupRoute
-  '/verify': typeof VerifyRoute
+  "/": typeof IndexRoute
+  "/add-product": typeof AddProductRoute
+  "/details": typeof DetailsRoute
+  "/earnings": typeof EarningsRoute
+  "/grow": typeof GrowRoute
+  "/gst": typeof GstRoute
+  "/help": typeof HelpRoute
+  "/login": typeof LoginRoute
+  "/onboarding": typeof OnboardingRoute
+  "/orders": typeof OrdersRoute
+  "/post": typeof PostRoute
+  "/products": typeof ProductsRoute
+  "/profile": typeof ProfileRoute
+  "/seller-type": typeof SellerTypeRoute
+  "/signup": typeof SignupRoute
+  "/verify": typeof VerifyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/add-product': typeof AddProductRoute
-  '/details': typeof DetailsRoute
-  '/earnings': typeof EarningsRoute
-  '/grow': typeof GrowRoute
-  '/gst': typeof GstRoute
-  '/help': typeof HelpRoute
-  '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
-  '/orders': typeof OrdersRoute
-  '/post': typeof PostRoute
-  '/products': typeof ProductsRoute
-  '/profile': typeof ProfileRoute
-  '/seller-type': typeof SellerTypeRoute
-  '/signup': typeof SignupRoute
-  '/verify': typeof VerifyRoute
+  "/": typeof IndexRoute
+  "/add-product": typeof AddProductRoute
+  "/details": typeof DetailsRoute
+  "/earnings": typeof EarningsRoute
+  "/grow": typeof GrowRoute
+  "/gst": typeof GstRoute
+  "/help": typeof HelpRoute
+  "/login": typeof LoginRoute
+  "/onboarding": typeof OnboardingRoute
+  "/orders": typeof OrdersRoute
+  "/post": typeof PostRoute
+  "/products": typeof ProductsRoute
+  "/profile": typeof ProfileRoute
+  "/seller-type": typeof SellerTypeRoute
+  "/signup": typeof SignupRoute
+  "/verify": typeof VerifyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/add-product'
-    | '/details'
-    | '/earnings'
-    | '/grow'
-    | '/gst'
-    | '/help'
-    | '/login'
-    | '/onboarding'
-    | '/orders'
-    | '/post'
-    | '/products'
-    | '/profile'
-    | '/seller-type'
-    | '/signup'
-    | '/verify'
+    | "/"
+    | "/add-product"
+    | "/details"
+    | "/earnings"
+    | "/grow"
+    | "/gst"
+    | "/help"
+    | "/login"
+    | "/onboarding"
+    | "/orders"
+    | "/post"
+    | "/products"
+    | "/profile"
+    | "/seller-type"
+    | "/signup"
+    | "/verify"
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/add-product'
-    | '/details'
-    | '/earnings'
-    | '/grow'
-    | '/gst'
-    | '/help'
-    | '/login'
-    | '/onboarding'
-    | '/orders'
-    | '/post'
-    | '/products'
-    | '/profile'
-    | '/seller-type'
-    | '/signup'
-    | '/verify'
+    | "/"
+    | "/add-product"
+    | "/details"
+    | "/earnings"
+    | "/grow"
+    | "/gst"
+    | "/help"
+    | "/login"
+    | "/onboarding"
+    | "/orders"
+    | "/post"
+    | "/products"
+    | "/profile"
+    | "/seller-type"
+    | "/signup"
+    | "/verify"
   id:
-    | '__root__'
-    | '/'
-    | '/add-product'
-    | '/details'
-    | '/earnings'
-    | '/grow'
-    | '/gst'
-    | '/help'
-    | '/login'
-    | '/onboarding'
-    | '/orders'
-    | '/post'
-    | '/products'
-    | '/profile'
-    | '/seller-type'
-    | '/signup'
-    | '/verify'
+    | "__root__"
+    | "/"
+    | "/add-product"
+    | "/details"
+    | "/earnings"
+    | "/grow"
+    | "/gst"
+    | "/help"
+    | "/login"
+    | "/onboarding"
+    | "/orders"
+    | "/post"
+    | "/products"
+    | "/profile"
+    | "/seller-type"
+    | "/signup"
+    | "/verify"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -238,117 +238,117 @@ export interface RootRouteChildren {
   VerifyRoute: typeof VerifyRoute
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/verify': {
-      id: '/verify'
-      path: '/verify'
-      fullPath: '/verify'
+    "/verify": {
+      id: "/verify"
+      path: "/verify"
+      fullPath: "/verify"
       preLoaderRoute: typeof VerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
+    "/signup": {
+      id: "/signup"
+      path: "/signup"
+      fullPath: "/signup"
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/seller-type': {
-      id: '/seller-type'
-      path: '/seller-type'
-      fullPath: '/seller-type'
+    "/seller-type": {
+      id: "/seller-type"
+      path: "/seller-type"
+      fullPath: "/seller-type"
       preLoaderRoute: typeof SellerTypeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
+    "/profile": {
+      id: "/profile"
+      path: "/profile"
+      fullPath: "/profile"
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
+    "/products": {
+      id: "/products"
+      path: "/products"
+      fullPath: "/products"
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/post': {
-      id: '/post'
-      path: '/post'
-      fullPath: '/post'
+    "/post": {
+      id: "/post"
+      path: "/post"
+      fullPath: "/post"
       preLoaderRoute: typeof PostRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/orders': {
-      id: '/orders'
-      path: '/orders'
-      fullPath: '/orders'
+    "/orders": {
+      id: "/orders"
+      path: "/orders"
+      fullPath: "/orders"
       preLoaderRoute: typeof OrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
+    "/onboarding": {
+      id: "/onboarding"
+      path: "/onboarding"
+      fullPath: "/onboarding"
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
+    "/login": {
+      id: "/login"
+      path: "/login"
+      fullPath: "/login"
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/help': {
-      id: '/help'
-      path: '/help'
-      fullPath: '/help'
+    "/help": {
+      id: "/help"
+      path: "/help"
+      fullPath: "/help"
       preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gst': {
-      id: '/gst'
-      path: '/gst'
-      fullPath: '/gst'
+    "/gst": {
+      id: "/gst"
+      path: "/gst"
+      fullPath: "/gst"
       preLoaderRoute: typeof GstRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/grow': {
-      id: '/grow'
-      path: '/grow'
-      fullPath: '/grow'
+    "/grow": {
+      id: "/grow"
+      path: "/grow"
+      fullPath: "/grow"
       preLoaderRoute: typeof GrowRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/earnings': {
-      id: '/earnings'
-      path: '/earnings'
-      fullPath: '/earnings'
+    "/earnings": {
+      id: "/earnings"
+      path: "/earnings"
+      fullPath: "/earnings"
       preLoaderRoute: typeof EarningsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/details': {
-      id: '/details'
-      path: '/details'
-      fullPath: '/details'
+    "/details": {
+      id: "/details"
+      path: "/details"
+      fullPath: "/details"
       preLoaderRoute: typeof DetailsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/add-product': {
-      id: '/add-product'
-      path: '/add-product'
-      fullPath: '/add-product'
+    "/add-product": {
+      id: "/add-product"
+      path: "/add-product"
+      fullPath: "/add-product"
       preLoaderRoute: typeof AddProductRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
+    "/": {
+      id: "/"
+      path: "/"
+      fullPath: "/"
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -376,13 +376,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
