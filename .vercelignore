@@ -1,0 +1,31 @@
+# Source files (not needed at runtime)
+src/
+e2e/
+test-results/
+
+# Config files
+vite.config.ts
+wrangler.jsonc
+tsconfig.json
+bunfig.toml
+eslint.config.js
+.prettierrc
+.gitignore
+.vscode/
+
+# Dev dependencies
+node_modules/
+
+# Build artifacts
+dist/
+
+# Lock files (bun install uses bun.lock at build time)
+package-lock.json
+
+# Reports and docs
+*.md
+!README.md
+
+# Environment
+.env
+.env.*

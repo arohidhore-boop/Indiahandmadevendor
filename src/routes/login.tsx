@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 import { AuthShell } from "@/components/ih/AuthShell";
 
 export const Route = createFileRoute("/login")({
@@ -42,7 +43,7 @@ function Login() {
             </div>
           </Field>
           <div className="text-right">
-            <a className="text-sm text-[var(--primary)] hover:underline">Forgot password?</a>
+            <button type="button" onClick={() => toast.info("Password reset coming soon.")} className="text-sm text-[var(--primary)] hover:underline cursor-pointer">Forgot password?</button>
           </div>
           <button type="button" onClick={() => nav({ to: "/post" })} className="ih-btn ih-btn-primary ih-btn-full">
             Sign In
@@ -55,7 +56,6 @@ function Login() {
           </Link>
         </p>
       </div>
-      <style>{`.ih-input{width:100%;padding:.75rem 1rem;border-radius:10px;border:1px solid var(--border);background:#fff;outline:none;font-size:.95rem}.ih-input:focus{border-color:var(--primary)}`}</style>
     </AuthShell>
   );
 }

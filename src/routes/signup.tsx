@@ -9,7 +9,9 @@ export const Route = createFileRoute("/signup")({
 });
 
 function Signup() {
-  const [show, setShow] = useState(false);
+  const [showPwd, setShowPwd] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const nav = useNavigate();
   return (
     <AuthShell step={1} totalSteps={5}>
       <div className="surface-card p-8">
@@ -19,8 +21,8 @@ function Signup() {
         </p>
 
         <div className="mt-6 space-y-2.5">
+          <p className="text-xs text-center text-[var(--muted-foreground)] mb-1">Social login coming soon</p>
           <SocialButton
-            onClick={() => { window.location.href = "/verify"; }}
             label="Continue with Google"
             icon={
               <svg className="h-4 w-4" viewBox="0 0 48 48" aria-hidden>
@@ -32,7 +34,6 @@ function Signup() {
             }
           />
           <SocialButton
-            onClick={() => { window.location.href = "/verify"; }}
             label="Continue with Facebook"
             icon={
               <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden>
@@ -41,7 +42,6 @@ function Signup() {
             }
           />
           <SocialButton
-            onClick={() => { window.location.href = "/verify"; }}
             label="Continue with Apple"
             icon={
               <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden fill="currentColor">
@@ -56,28 +56,34 @@ function Signup() {
           <span className="text-[14px] leading-[20px] tracking-[0.1px] text-[var(--muted-foreground)]">or</span>
           <span className="flex-1 h-px bg-[var(--border)]" />
         </div>
-
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            window.location.href = "/verify";
+            nav({ to: "/verify" });
           }}
           className="space-y-4"
-          noValidate
         >
+          <Field label="Full name">
+            <input type="text" className="ih-input" placeholder="Your full name" required />
+          </Field>
           <Field label="Email">
-            <input type="email" className="ih-input" placeholder="you@example.in" defaultValue="demo@indiahandmade.in" />
+            <input type="email" className="ih-input" placeholder="you@example.in" defaultValue="demo@indiahandmade.in" required />
           </Field>
           <Field label="Password">
             <div className="relative">
-              <input type={show ? "text" : "password"}  className="ih-input pr-10" defaultValue="demo1234" />
-              <button type="button" onClick={() => setShow((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" aria-label="Toggle password">
-                {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              <input type={showPwd ? "text" : "password"} className="ih-input pr-10" defaultValue="demo1234" required minLength={8} />
+              <button type="button" onClick={() => setShowPwd((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" aria-label={showPwd ? "Hide password" : "Show password"}>
+                {showPwd ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
           </Field>
           <Field label="Confirm password">
-            <input type={show ? "text" : "password"}  className="ih-input" defaultValue="demo1234" />
+            <div className="relative">
+              <input type={showConfirm ? "text" : "password"} className="ih-input pr-10" defaultValue="demo1234" required minLength={8} />
+              <button type="button" onClick={() => setShowConfirm((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]" aria-label={showConfirm ? "Hide password" : "Show password"}>
+                {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </Field>
           <button type="submit" className="ih-btn ih-btn-primary ih-btn-full">
             Continue
@@ -88,17 +94,17 @@ function Signup() {
           <Link to="/login" className="text-[var(--primary)] font-medium hover:underline">Sign in</Link>
         </p>
       </div>
-      <style>{`.ih-input{width:100%;padding:.75rem 1rem;border-radius:10px;border:1px solid var(--border);background:#fff;outline:none;font-size:.95rem}.ih-input:focus{border-color:var(--primary)}`}</style>
     </AuthShell>
   );
 }
 
-function SocialButton({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick: () => void }) {
+function SocialButton({ icon, label, onClick }: { icon: React.ReactNode; label: string; onClick?: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full min-h-10 rounded-[10px] border border-[var(--border)] bg-white hover:bg-[var(--cream)] transition flex items-center justify-center gap-2.5 px-4 py-2.5 text-sm font-medium text-[var(--foreground)]"
+      disabled={!onClick}
+      className="w-full min-h-10 rounded-[10px] border border-[var(--border)] bg-white hover:bg-[var(--cream)] transition flex items-center justify-center gap-2.5 px-4 py-2.5 text-sm font-medium text-[var(--foreground)] disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {icon}
       {label}

@@ -1092,6 +1092,53 @@ function ReviewSection({
 
 /* ---------- Validation ---------- */
 
-function validateStep(_step: number, _d: OnboardingData): Record<string, string> {
-  return {};
+function validateStep(step: number, d: OnboardingData): Record<string, string> {
+  const e: Record<string, string> = {};
+
+  if (step === 1) {
+    if (d.gstChoice === "yes_gst") {
+      if (!d.gstNumber || d.gstNumber.trim().length !== 15) {
+        e.gstNumber = "Enter a valid 15-character GSTIN";
+      }
+    } else if (d.gstChoice === "eid") {
+      if (!d.eidNumber || d.eidNumber.trim().length < 5) {
+        e.eidNumber = "Enter a valid EID number";
+      }
+    }
+  }
+
+  if (step === 2) {
+    if (!d.publicShopName || d.publicShopName.trim().length === 0) {
+      e.publicShopName = "Shop name is required";
+    }
+    if (!d.craftType || d.craftType.trim().length === 0) {
+      e.craftType = "Select a primary craft";
+    }
+  }
+
+  if (step === 3) {
+    if (!d.pickupLine1 || d.pickupLine1.trim().length === 0) {
+      e.pickupLine1 = "Pickup address is required";
+    }
+    if (!d.pickupCity || d.pickupCity.trim().length === 0) {
+      e.pickupCity = "City is required";
+    }
+    if (!d.pickupState || d.pickupState.trim().length === 0) {
+      e.pickupState = "State is required";
+    }
+    if (!d.pickupPincode || !/^\d{6}$/.test(d.pickupPincode.trim())) {
+      e.pickupPincode = "Enter a valid 6-digit pincode";
+    }
+  }
+
+  if (step === 4) {
+    if (!d.accountNumber || d.accountNumber.trim().length === 0) {
+      e.accountNumber = "Account number is required";
+    }
+    if (!d.ifsc || d.ifsc.trim().length === 0) {
+      e.ifsc = "IFSC code is required";
+    }
+  }
+
+  return e;
 }

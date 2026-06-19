@@ -22,7 +22,7 @@ function Products() {
     if (f === "Active") return p.status === "active";
     if (f === "Draft") return p.status === "draft";
     if (f === "Under review") return p.status === "review";
-    if (f === "Out of stock") return p.status === "out" || p.stock === 0;
+    if (f === "Out of stock") return p.status === "out" || p.stock === 0 || p.stock === undefined;
     return true;
   });
 

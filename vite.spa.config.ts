@@ -15,10 +15,20 @@ export default defineConfig({
     tailwindcss(),
     tsconfigPaths(),
   ],
-  server: {
-    allowedHosts: true,
-  },
   build: {
     outDir: "dist/spa",
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (id.includes("node_modules/@radix-ui")) return "vendor-radix";
+          if (id.includes("node_modules/lucide-react")) return "vendor-icons";
+          if (id.includes("node_modules/recharts")) return "vendor-charts";
+          if (id.includes("node_modules")) return "vendor";
+        },
+      },
+    },
+    target: "es2022",
+    cssMinify: true,
+    minify: "esbuild",
   },
 });

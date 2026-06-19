@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { AuthShell } from "@/components/ih/AuthShell";
 
@@ -8,6 +8,7 @@ export const Route = createFileRoute("/verify")({
 });
 
 function Verify() {
+  const nav = useNavigate();
   const [digits, setDigits] = useState<string[]>(Array(6).fill(""));
   const [timer, setTimer] = useState(45);
   const refs = useRef<(HTMLInputElement | null)[]>([]);
@@ -52,7 +53,7 @@ function Verify() {
           ))}
         </div>
         <button
-          onClick={() => { window.location.href = "/seller-type"; }}
+          onClick={() => { nav({ to: "/seller-type" }); }}
           className="ih-btn ih-btn-primary ih-btn-full mt-7"
         >
           Verify and continue

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { AuthShell } from "@/components/ih/AuthShell";
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/details")({
 });
 
 function Details() {
+  const nav = useNavigate();
   const [f, setF] = useState({ name: "Neha Kumar", shopName: "Samba Sakhi Crafts", city: "Jaipur", state: "Rajasthan", primaryCraft: "Handicraft", mobile: "9876543210" });
   return (
     <AuthShell step={4} totalSteps={4}>
@@ -51,7 +52,7 @@ function Details() {
             ihStore.setSeller({ ...f, initials: f.name.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase() || "S" });
             ihStore.resetOnboarding();
             sessionStorage.setItem("justRegistered", "1");
-            window.location.href = "/post";
+            nav({ to: "/post" });
           }} className="ih-btn ih-btn-primary ih-btn-full">
             Continue <ArrowRight className="h-4 w-4" />
           </button>

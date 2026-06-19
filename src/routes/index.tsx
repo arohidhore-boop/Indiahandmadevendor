@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   ArrowRight,
   HandHeart,
@@ -15,6 +16,8 @@ import {
   Instagram,
   Facebook,
   Youtube,
+  Menu,
+  X,
 } from "lucide-react";
 import { GovBar } from "@/components/ih/GovBar";
 import { BrandMark } from "@/components/ih/BrandMark";
@@ -42,13 +45,21 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
+  const [mobileOpen, setMobileOpen] = useState(false);
   return (
     <div className="min-h-screen flex flex-col bg-[var(--cream)]">
       <GovBar />
       <header className="h-[72px] bg-white border-b border-[var(--border)] sticky top-0 z-30">
         <div className="max-w-[1200px] mx-auto px-6 lg:px-10 h-full flex items-center justify-between">
           <BrandMark />
-          <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMobileOpen((o) => !o)}
+            className="sm:hidden h-9 w-9 rounded-lg border border-[var(--border)] flex items-center justify-center bg-white"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+          <div className="hidden sm:flex items-center gap-3">
             <Link to="/login" className="text-[14px] leading-[20px] font-medium text-[var(--primary)] hover:underline">
               Sign in
             </Link>
@@ -58,6 +69,12 @@ function Landing() {
           </div>
         </div>
       </header>
+      {mobileOpen && (
+        <div className="sm:hidden bg-white border-b border-[var(--border)] px-6 py-4 space-y-3 animate-fade-up">
+          <Link to="/login" className="block text-[14px] font-medium text-[var(--foreground)] hover:text-[var(--primary)]">Sign in</Link>
+          <Link to="/signup" className="ih-btn ih-btn-primary w-full justify-center">Start selling</Link>
+        </div>
+      )}
 
       <main className="flex-1">
         {/* HERO */}
@@ -88,6 +105,7 @@ function Landing() {
                   alt="Indian artisan hand-carving an ornate wooden panel"
                   width={1280}
                   height={1280}
+                  decoding="async"
                   className="w-full h-[480px] lg:h-[560px] object-cover"
                 />
               </div>
@@ -227,23 +245,43 @@ function Landing() {
                   { Icon: Facebook, label: "Facebook" },
                   { Icon: Youtube, label: "YouTube" },
                 ].map(({ Icon, label }) => (
-                  <a key={label} href="#" aria-label={label} className="h-9 w-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-white/10 hover:text-white transition-colors">
+                  <span key={label} role="button" tabIndex={0} aria-label={label} className="h-9 w-9 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
                     <Icon className="h-4 w-4" />
-                  </a>
+                  </span>
                 ))}
               </div>
             </div>
             <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                ["About us", "Our mission", "Contact us", "Sitemap"],
-                ["Start selling", "Seller onboarding", "Help center", "FAQs"],
-                ["How it works", "Payments & pricing", "GST & EID guide", "Shipping & logistics"],
-                ["Policies", "Terms for sellers", "Privacy policy", "Returns & refunds"],
-              ].map((col, i) => (
+              {([
+                [
+                  { label: "About us", to: "/help" },
+                  { label: "Our mission", to: "/help" },
+                  { label: "Contact us", to: "/help" },
+                  { label: "Sitemap", to: "/" },
+                ],
+                [
+                  { label: "Start selling", to: "/signup" },
+                  { label: "Seller onboarding", to: "/onboarding" },
+                  { label: "Help center", to: "/help" },
+                  { label: "FAQs", to: "/help" },
+                ],
+                [
+                  { label: "How it works", to: "/" },
+                  { label: "Payments & pricing", to: "/earnings" },
+                  { label: "GST & EID guide", to: "/gst" },
+                  { label: "Shipping & logistics", to: "/help" },
+                ],
+                [
+                  { label: "Policies", to: "/help" },
+                  { label: "Terms for sellers", to: "/help" },
+                  { label: "Privacy policy", to: "/help" },
+                  { label: "Returns & refunds", to: "/help" },
+                ],
+              ] as const).map((col, i) => (
                 <ul key={i} className="space-y-3 text-[14px] leading-[20px] text-white/80">
                   {col.map((link) => (
-                    <li key={link}>
-                      <a href="#" className="hover:text-white transition-colors">{link}</a>
+                    <li key={link.label}>
+                      <Link to={link.to} className="hover:text-white transition-colors">{link.label}</Link>
                     </li>
                   ))}
                 </ul>
@@ -257,9 +295,9 @@ function Landing() {
               © India Handmade. All rights reserved.
             </p>
             <div className="flex items-center gap-5 text-[12px] leading-[16px] text-white/60">
-              <Link to="/" className="hover:text-white transition-colors">Terms & Conditions</Link>
+              <Link to="/help" className="hover:text-white transition-colors">Terms & Conditions</Link>
               <span className="text-white/20">·</span>
-              <Link to="/" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link to="/help" className="hover:text-white transition-colors">Privacy Policy</Link>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
 import {
   ImagePlus, CheckCircle2, XCircle, Info, Package2, Sparkles, Check, ArrowLeft, ArrowRight, Loader2, Search, X,
@@ -84,6 +84,7 @@ const initial: FormState = {
 };
 
 function AddProduct() {
+  const nav = useNavigate();
   const [step, setStep] = useState(0);
   const [showCongrats, setShowCongrats] = useState(false);
   const [f, setF] = useState<FormState>(initial);
@@ -125,7 +126,7 @@ function AddProduct() {
   };
   const back = () => {
     if (step > 0) setStep(step - 1);
-    else window.location.href = "/post";
+    else nav({ to: "/post" });
   };
 
   const publish = () => {
@@ -143,7 +144,7 @@ function AddProduct() {
 
   const goToShop = () => {
     try { sessionStorage.setItem("justAddedProduct", "1"); } catch {}
-    window.location.href = "/post";
+    nav({ to: "/post" });
   };
 
   return (
@@ -281,7 +282,7 @@ function CategorySearch({ selected, onSelect, detectedType, suggestedSubs }: {
             <div className="text-[13px] text-[var(--muted-foreground)]">{selected.category}</div>
             <div className="text-[14px] font-medium text-[var(--foreground)]">{selected.subcategory}</div>
           </div>
-          <button onClick={() => { onSelect("", ""); setQuery(""); }} className="p-1 hover:bg-white/50 rounded-lg transition">
+          <button onClick={() => { onSelect("", ""); setQuery(""); }} className="p-1 hover:bg-white/50 rounded-lg transition" aria-label="Clear selection">
             <X className="h-4 w-4 text-[var(--muted-foreground)]" />
           </button>
         </div>
@@ -412,7 +413,7 @@ function Photos({ images, onFiles, remove, aiDetecting, aiDetected, onAiDetect, 
               {src ? (
                 <>
                   <img src={src} alt="" className="h-full w-full object-cover" />
-                  <button onClick={() => remove(i)} className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/60 text-white grid place-items-center text-xs">×</button>
+                  <button onClick={() => remove(i)} className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/60 text-white grid place-items-center text-xs" aria-label="Remove image">×</button>
                 </>
               ) : (
                 <label className="absolute inset-0 grid place-items-center cursor-pointer text-[var(--muted-foreground)] hover:text-[var(--primary)] hover:border-[var(--primary)]">
@@ -659,7 +660,7 @@ function VariantTags({ label, hint, values, onChange, suggestions, showSwatch = 
                 className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-[14px] leading-[20px] outline-none focus:border-[var(--primary)]"
                 inputMode="numeric" placeholder="0" value={v.qty}
                 onChange={(e) => setQty(v.label, e.target.value)} />
-              <button type="button" onClick={() => remove(v.label)} className="text-[var(--muted-foreground)] hover:text-[var(--destructive)] text-lg leading-none justify-self-center">×</button>
+              <button type="button" onClick={() => remove(v.label)} className="text-[var(--muted-foreground)] hover:text-[var(--destructive)] text-lg leading-none justify-self-center" aria-label="Remove variant">×</button>
             </div>
           ))}
         </div>

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AuthShell } from "@/components/ih/AuthShell";
@@ -10,13 +10,13 @@ export const Route = createFileRoute("/gst")({
 });
 
 function Gst() {
+  const nav = useNavigate();
   const [hasGst, setHasGst] = useState<"yes" | "no" | null>(null);
   const [gst, setGst] = useState("");
   const [eid, setEid] = useState("");
-
   const goHome = () => {
     sessionStorage.setItem("justRegistered", "1");
-    window.location.href = "/post";
+    nav({ to: "/post" });
   };
 
   const onContinue = () => {

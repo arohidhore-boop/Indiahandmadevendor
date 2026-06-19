@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import type { ReactNode } from "react";
 import { GovBar } from "./GovBar";
 import { BrandMark } from "./BrandMark";
@@ -32,6 +33,7 @@ export function AuthShell({
       <main className="flex-1 grid place-items-center px-4 py-12">
         <div className="w-full max-w-[460px] animate-fade-up">{children}</div>
       </main>
+      <Toaster />
     </div>
   );
 }
