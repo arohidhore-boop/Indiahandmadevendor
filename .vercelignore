@@ -1,28 +1,9 @@
-# Source files (not needed at runtime)
-src/
+# Test artifacts (not needed for build)
 e2e/
 test-results/
+playwright.config.ts
 
-# Config files
-vite.config.ts
-wrangler.jsonc
-tsconfig.json
-bunfig.toml
-eslint.config.js
-.prettierrc
-.gitignore
-.vscode/
-
-# Dev dependencies
-node_modules/
-
-# Build artifacts
-dist/
-
-# Lock files (bun install uses bun.lock at build time)
-package-lock.json
-
-# Reports and docs
+# Reports
 *.md
 !README.md
 
