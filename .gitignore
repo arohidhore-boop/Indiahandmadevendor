@@ -32,3 +32,4 @@ dist-ssr
 *.sw?
 .vercel
 test-results/
+.env*.local
