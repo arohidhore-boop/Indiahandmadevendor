@@ -22,7 +22,7 @@ export function GovBar() {
     <div className="h-10 w-full bg-[var(--gov)] text-white text-[12px]">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10 h-full flex items-center gap-4">
       <div className="flex items-center gap-2">
-        <Image src="/flag.png" alt="Flag of India" width={24} height={16} className="h-4 w-6 object-contain" />
+        <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/flag.png`} alt="Flag of India" width={24} height={16} className="h-4 w-6 object-contain" />
         <span className="font-medium tracking-wide">Government of India</span>
       </div>
       <div className="ml-auto flex items-center text-white/90 divide-x divide-white/20">
