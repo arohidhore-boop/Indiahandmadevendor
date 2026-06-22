@@ -3,6 +3,7 @@ import { Noto_Sans, Noto_Serif } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { StoreProvider } from "@/lib/store";
 
 const notoSans = Noto_Sans({
   variable: "--font-sans",
@@ -33,7 +34,7 @@ export default function RootLayout({
       className={cn(notoSans.variable, notoSerif.variable, "antialiased")}
     >
       <body className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] font-sans">
-        {children}
+        <StoreProvider>{children}</StoreProvider>
         <Toaster />
       </body>
     </html>
