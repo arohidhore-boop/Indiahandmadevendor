@@ -1107,23 +1107,28 @@ function validateStep(step: number, d: OnboardingData): Record<string, string> {
     if (!d.publicShopName || d.publicShopName.trim().length === 0) {
       e.publicShopName = "Shop name is required";
     }
-    if (!d.craftType || d.craftType.trim().length === 0) {
-      e.craftType = "Select a primary craft";
-    }
+    // craftType is not collected in Step2Shop — validation skipped to match UI
   }
 
   if (step === 3) {
-    if (!d.pickupLine1 || d.pickupLine1.trim().length === 0) {
-      e.pickupLine1 = "Pickup address is required";
+    // Communication address must be set (either from GST or entered manually)
+    if (!d.commLine1 || d.commLine1.trim().length === 0) {
+      e.commLine1 = "Communication address is required";
     }
-    if (!d.pickupCity || d.pickupCity.trim().length === 0) {
-      e.pickupCity = "City is required";
-    }
-    if (!d.pickupState || d.pickupState.trim().length === 0) {
-      e.pickupState = "State is required";
-    }
-    if (!d.pickupPincode || !/^\d{6}$/.test(d.pickupPincode.trim())) {
-      e.pickupPincode = "Enter a valid 6-digit pincode";
+    // Only validate pickup-specific fields when user opts out of "same as communication"
+    if (d.pickupSameAsComm === false) {
+      if (!d.pickupLine1 || d.pickupLine1.trim().length === 0) {
+        e.pickupLine1 = "Pickup address is required";
+      }
+      if (!d.pickupCity || d.pickupCity.trim().length === 0) {
+        e.pickupCity = "City is required";
+      }
+      if (!d.pickupState || d.pickupState.trim().length === 0) {
+        e.pickupState = "State is required";
+      }
+      if (!d.pickupPincode || !/^\d{6}$/.test(d.pickupPincode.trim())) {
+        e.pickupPincode = "Enter a valid 6-digit pincode";
+      }
     }
   }
 

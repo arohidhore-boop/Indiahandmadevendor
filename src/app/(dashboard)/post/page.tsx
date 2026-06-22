@@ -134,10 +134,7 @@ export default function Home() {
         <div className="fixed inset-0 z-[100] grid place-items-center bg-black/50 animate-fade-in p-4">
           <div className="relative max-w-md w-full surface-card p-8 text-center animate-fade-up">
             <button
-              onClick={() => {
-                dismissOverlay();
-                router.push("/post");
-              }}
+              onClick={dismissOverlay}
               className="absolute top-3 right-3 h-8 w-8 grid place-items-center rounded-full hover:bg-[var(--cream)] text-[var(--muted-foreground)]"
               aria-label="Close"
             >
@@ -154,7 +151,7 @@ export default function Home() {
               type="button"
               onClick={() => {
                 dismissOverlay();
-                router.push("/post");
+                router.push("/onboarding?step=1");
               }}
               className="ih-btn ih-btn-primary mt-6 w-full justify-center"
             >
