@@ -108,6 +108,7 @@ type StoreCtx = AppState & {
   updateOnboarding: (patch: Partial<OnboardingData>) => void;
   setOnboardingStatus: (step: number, status: OnboardingStatus) => void;
   resetOnboarding: () => void;
+  signOut: () => void;
 };
 
 const StoreContext = createContext<StoreCtx | null>(null);
@@ -148,8 +149,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setState(prev => { const next = { ...prev, onboarding: DEFAULT_ONBOARDING }; save(next); return next; });
   }, []);
 
+  const signOut = useCallback(() => {
+    if (typeof window !== "undefined") {
+      try { localStorage.removeItem(KEY); } catch {}
+      try { sessionStorage.removeItem("justRegistered"); } catch {}
+    }
+    setState(DEFAULTS);
+  }, []);
+
   return (
-    <StoreContext.Provider value={{ ...state, setSeller, addProduct, updateOnboarding, setOnboardingStatus, resetOnboarding }}>
+    <StoreContext.Provider value={{ ...state, setSeller, addProduct, updateOnboarding, setOnboardingStatus, resetOnboarding, signOut }}>
       {children}
     </StoreContext.Provider>
   );

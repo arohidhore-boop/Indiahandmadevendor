@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home, LayoutGrid, ClipboardList, IndianRupee, Sparkles, HelpCircle,
   LogOut, Bell, ChevronDown, PanelLeftClose, PanelLeftOpen,
@@ -22,7 +22,13 @@ const NAV = [
 export function AppShell({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
-  const { seller } = useStore();
+  const router = useRouter();
+  const { seller, signOut } = useStore();
+
+  const handleSignOut = () => {
+    signOut();
+    router.push("/");
+  };
   return (
     <div className="min-h-screen w-full flex flex-col bg-[var(--cream)]">
       <GovBar />
@@ -78,14 +84,15 @@ export function AppShell({ children }: { children: ReactNode }) {
               })}
             </nav>
             <div className={`${collapsed ? "p-2" : "p-3"} border-t border-[var(--border)]`}>
-              <Link
-                href="/"
+              <button
+                type="button"
+                onClick={handleSignOut}
                 title={collapsed ? "Log out" : undefined}
-                className={`flex items-center ${collapsed ? "justify-center h-10 w-10 mx-auto" : "gap-3 px-3.5 py-2.5"} rounded-2xl text-sm text-[var(--muted-foreground)] hover:bg-[var(--cream)]`}
+                className={`w-full flex items-center ${collapsed ? "justify-center h-10 w-10 mx-auto" : "gap-3 px-3.5 py-2.5"} rounded-2xl text-sm text-[var(--muted-foreground)] hover:bg-[var(--cream)]`}
               >
                 <LogOut className="h-[18px] w-[18px]" />
                 {!collapsed && <span>Log out</span>}
-              </Link>
+              </button>
             </div>
             <button
               onClick={() => setCollapsed((c) => !c)}
